@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xylix OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fff;--bg2:#f8f9fb;--bg3:#f1f3f5;--card:#fff;--border:#e8eaed;--border2:#d1d5db;--text:#111827;--text2:#4b5563;--text3:#9ca3af;--accent:#2563eb;--accent2:#1d4ed8;--al:#eff6ff;--at:#1e40af;--green:#059669;--gb:#ecfdf5;--gt:#065f46;--red:#dc2626;--rb:#fef2f2;--rt:#991b1b;--yellow:#d97706;--yb:#fffbeb;--shadow:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 6px -1px rgba(0,0,0,.06);--r:10px;--rs:7px;--rx:5px}
+html,body{height:100%;background:var(--bg2);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Outfit',sans-serif;font-weight:700}
+input,textarea,select,button{font-family:inherit;font-size:inherit;color:inherit;outline:none}
+::selection{background:var(--al);color:var(--at)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.app{display:flex;height:100vh}
+.sb{width:220px;background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sb-logo{padding:20px 18px 16px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border)}
+.lm{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;font-family:'Outfit'}
+.lt{font-family:'Outfit';font-weight:800;font-size:17px;letter-spacing:-.03em}
+.lg{font-size:9px;color:var(--text3);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-left:auto;background:var(--bg2);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+.nv{flex:1;overflow-y:auto;padding:12px 8px}
+.ng{margin-bottom:20px}
+.ng-t{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:0 10px 6px}
+.ni{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--rs);cursor:pointer;transition:all .12s;color:var(--text2);font-weight:500;font-size:13px}
+.ni:hover{background:var(--bg2);color:var(--text)}
+.ni.on{background:var(--al);color:var(--at)}
+.ni svg{width:17px;height:17px;flex-shrink:0;stroke-width:1.8}
+.sb-ft{padding:10px 8px;border-top:1px solid var(--border)}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--rs);cursor:pointer;color:var(--text3);font-weight:500;font-size:13px;width:100%;border:none;background:none;transition:all .12s}
+.sb-btn:hover{background:var(--bg2);color:var(--text)}
+.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg2)}
+.tb{height:52px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px}
+.tb-t{font-family:'Outfit';font-size:14px;font-weight:700}
+.tb-s{color:var(--text3);font-size:12px;font-weight:500}
+.ct{flex:1;overflow-y:auto;padding:24px}
+.pg{display:none}.pg.on{display:block}
+.cd{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ct-t{font-family:'Outfit';font-size:14px;font-weight:700}
+.btn{padding:7px 15px;border-radius:var(--rx);font-weight:600;font-size:13px;cursor:pointer;transition:all .12s;border:none;display:inline-flex;align-items:center;gap:5px}
+.bp{background:var(--accent);color:#fff}.bp:hover{background:var(--accent2)}
+.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}.bs:hover{background:var(--bg2)}
+.bg{background:none;color:var(--text2);padding:5px 8px}.bg:hover{background:var(--bg2)}
+.bsm{padding:4px 10px;font-size:12px}
+.bd{background:var(--rb);color:var(--rt);border:1px solid #fecaca}
+.inp{background:var(--bg);border:1px solid var(--border);border-radius:var(--rx);padding:8px 12px;color:var(--text);width:100%;transition:border .12s}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
+.inp::placeholder{color:var(--text3)}
+textarea.inp{resize:vertical;min-height:72px;line-height:1.55}
+select.inp{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.lb{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px;display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.fx{display:flex}.gc{gap:12px}.g4x{gap:16px}.ac{align-items:center}.jb{justify-content:space-between}
+.m3{margin-bottom:12px}.m4{margin-bottom:16px}.m5{margin-bottom:20px}.mt3{margin-top:12px}.mt4{margin-top:16px}
+.tabs{display:flex;gap:1px;background:var(--bg3);border-radius:var(--rs);padding:3px;width:fit-content}
+.tab{padding:5px 14px;border-radius:var(--rx);font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);transition:all .12s}
+.tab:hover{color:var(--text)}.tab.on{background:var(--bg);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.cw{display:flex;flex-direction:column;height:calc(100vh - 52px)}
+.cms{flex:1;overflow-y:auto;padding:20px 24px}
+.cm{max-width:680px;margin-bottom:14px}.cm.u{margin-left:auto}
+.bbl{padding:11px 15px;border-radius:var(--r);font-size:13.5px;line-height:1.6}
+.cm.u .bbl{background:var(--accent);color:#fff;border-bottom-right-radius:3px}
+.cm.a .bbl{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:3px}
+.mw{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
+.cm.u .mw{text-align:right}
+.cbar{border-top:1px solid var(--border);padding:14px 24px;background:var(--bg)}
+.cbi{display:flex;gap:8px;align-items:flex-end;max-width:740px}
+.cbi textarea{flex:1;min-height:40px;max-height:140px;resize:none;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg2);line-height:1.5}
+.cbi textarea:focus{border-color:var(--accent);background:var(--bg)}
+.ib{width:38px;height:38px;border-radius:var(--rx);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border:1px solid var(--border);background:var(--bg);color:var(--text3);transition:all .12s}
+.ib:hover{border-color:var(--accent);color:var(--accent)}
+.sb2{width:38px;height:38px;border-radius:var(--rx);background:var(--accent);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;flex-shrink:0}
+.sb2:hover{background:var(--accent2)}
+.tr{display:flex;align-items:center;gap:11px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:7px}
+.tc{width:18px;height:18px;border:2px solid var(--border2);border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.tc:hover{border-color:var(--accent)}
+.tc.dn{background:var(--green);border-color:var(--green)}.tc.dn::after{content:'\2713';color:#fff;font-size:10px;font-weight:700}
+.tr.dn .tl{text-decoration:line-through;color:var(--text3)}
+.tl{flex:1;font-size:13px}.tt{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:3px;background:var(--rb);color:var(--rt)}
+.tx{color:var(--text3);cursor:pointer;padding:3px;border:none;background:none;font-size:13px;border-radius:3px}.tx:hover{color:var(--red);background:var(--rb)}
+.cc{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .15s}.cc:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.cth{height:130px;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:11px;overflow:hidden}.cth img{width:100%;height:100%;object-fit:cover}
+.cbd{padding:12px}.cnm{font-family:'Outfit';font-weight:700;font-size:14px;margin-bottom:2px}.cvb{font-size:11px;color:var(--text3)}
+.pv{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);min-height:280px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;overflow:hidden}
+.pv img,.pv video{max-width:100%;max-height:380px;border-radius:var(--rs)}
+.uz{border:2px dashed var(--border);border-radius:var(--rs);padding:20px;text-align:center;cursor:pointer;color:var(--text3);transition:all .12s;min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.uz:hover{border-color:var(--accent);background:var(--al);color:var(--at)}
+.sc{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.sn{font-family:'Outfit';font-size:26px;font-weight:800;letter-spacing:-.02em}.sl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.sn.g{color:var(--green)}.sn.r{color:var(--red)}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.2);backdrop-filter:blur(3px);z-index:100;display:none;align-items:center;justify-content:center}
+.mo.sh{display:flex}
+.mb{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);width:480px;max-width:90vw;max-height:80vh;overflow-y:auto;padding:22px;box-shadow:var(--shadow-md)}
+.mb h3{font-family:'Outfit';font-size:16px;margin-bottom:14px}
+.cb{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:14px;white-space:pre-wrap;overflow-y:auto;max-height:420px}
+.kr{display:flex;gap:10px;align-items:center;margin-bottom:9px}.kl{width:100px;font-size:12px;font-weight:600;color:var(--text3);flex-shrink:0}
+.kd{width:7px;height:7px;border-radius:50%;flex-shrink:0}.kd.y{background:var(--green)}.kd.n{background:var(--text3)}
+.em{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;color:var(--text3);text-align:center}.em p{font-size:12px;max-width:280px;line-height:1.6;margin-top:8px}
+.ld{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .5s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .25s ease-out}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sb">
+<div class="sb-logo"><div class="lm">X</div><span class="lt">Xylix</span><span class="lg">OS</span></div>
+<nav class="nv">
+<div class="ng"><div class="ng-t">Core</div>
+<div class="ni on" data-p="chat" onclick="go('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>AI Chat</div>
+<div class="ni" data-p="daily" onclick="go('daily')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Daily OS</div>
+</div>
+<div class="ng"><div class="ng-t">Create</div>
+<div class="ni" data-p="models" onclick="go('models')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Model Studio</div>
+<div class="ni" data-p="imagegen" onclick="go('imagegen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image Gen</div>
+<div class="ni" data-p="videogen" onclick="go('videogen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video Gen</div>
+</div>
+<div class="ng"><div class="ng-t">Business</div>
+<div class="ni" data-p="ads" onclick="go('ads')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Ad Creative</div>
+<div class="ni" data-p="dropship" onclick="go('dropship')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Drop Shipping</div>
+<div class="ni" data-p="betting" onclick="go('betting')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Betting</div>
+</div>
+<div class="ng"><div class="ng-t">Build</div>
+<div class="ni" data-p="clone" onclick="go('clone')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Clone Projects</div>
+<div class="ni" data-p="codelab" onclick="go('codelab')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Code Lab</div>
+</div>
+</nav>
+<div class="sb-ft"><button class="sb-btn" onclick="go('settings')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</button></div>
+</aside>
+<div class="mn">
+<div class="tb"><span class="tb-t" id="pt">AI Chat</span><span style="color:var(--border2);margin:0 4px">/</span><span class="tb-s" id="ps">Claude Opus · Prompt Engineering</span></div>
+
+<div class="pg on" id="p-chat"><div class="cw"><div class="cms" id="cm0"><div class="cm a fu"><div class="mw">Xylix OS · Claude</div><div class="bbl">What's good?</div></div></div><div class="cbar"><div class="cbi"><div class="ib" onclick="document.getElementById('cf0').click()" title="Upload images"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="cf0" accept="image/*" multiple style="display:none" onchange="cImgH(this)"></div><textarea id="ci0" placeholder="Message Claude... (Ctrl+Enter)" rows="1" onkeydown="if(event.ctrlKey&&event.key==='Enter'){sChat();event.preventDefault()}" oninput="ar(this)"></textarea><button class="sb2" id="stopBtn" onclick="stopChat()" style="display:none;background:var(--red)" title="Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button><button class="sb2" id="sendBtn" onclick="sChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div></div></div>
+
+<div class="pg" id="p-daily"><div class="ct"><div class="fx jb ac m5"><div><h1 style="font-size:22px;letter-spacing:-.02em" id="dd"></h1><p style="color:var(--text3);font-size:12px;margin-top:3px" id="dc"></p></div></div><div class="fx gc m5"><input class="inp" id="ti0" placeholder="Add a task..." style="flex:1" onkeydown="if(event.key==='Enter')aT()"><button class="btn bp" onclick="aT()">Add</button></div><div id="tl0"></div></div></div>
+
+<div class="pg" id="p-models"><div class="ct"><div class="fx jb ac m5"><div><h1 style="font-size:18px">Characters</h1><p style="color:var(--text3);font-size:12px;margin-top:2px">Upload unlimited reference images per character. More refs = perfect 1:1 consistency that never drifts.</p></div><button class="btn bp" onclick="oM('mc0')">+ New Character</button></div><div class="g3 m5" id="cg0"></div><div class="cd"><div class="ch"><span class="ct-t">Generate Content Plan</span></div><div class="g2 gc"><div><label class="lb">Character</label><select class="inp" id="gc0"><option value="">Select...</option></select></div><div><label class="lb">Platform</label><select class="inp" id="gp0"><option>Instagram Post</option><option>Instagram Reel</option><option>TikTok</option></select></div></div><div class="mt3"><label class="lb">Scene</label><input class="inp" id="gs0" placeholder="e.g. Coffee shop, golden hour beach..."></div><button class="btn bp mt3" onclick="gPlan()">Generate</button><div id="po0" class="mt3" style="display:none"></div></div></div></div>
+
+<div class="pg" id="p-imagegen"><div class="ct"><div class="g2 g4x"><div class="cd"><div class="ch"><span class="ct-t">Generate Image</span></div><label class="lb">Model</label><select class="inp m3" id="im0"><option value="fal-ai/flux-pro/v1.1-ultra">Flux 2 Pro Ultra</option><option value="fal-ai/nano-banana-pro">Nano Banana Pro</option><option value="fal-ai/ideogram/v3">Ideogram V3</option><option value="fal-ai/seedream-3">Seedream 3</option></select><label class="lb">Style Preset</label><select class="inp m3" id="is0"><option value="">None</option><option value="biblical">Biblical Epic</option><option value="instagram">Instagram Lifestyle</option><option value="product">Product Photography</option><option value="tiktok">TikTok UGC</option></select><label class="lb">Character</label><select class="inp m3" id="ic0"><option value="">None</option></select><label class="lb">Reference Images (up to 6 — for poses, face swaps, style matching)</label><div class="uz m3" onclick="document.getElementById('iref0').click()" style="min-height:60px;padding:12px"><span style="font-size:11px">Upload reference images</span><input type="file" id="iref0" accept="image/*" multiple style="display:none" onchange="imgRefPv(this)"></div><div id="irp0" class="fx gc m3" style="flex-wrap:wrap"></div><label class="lb">Prompt</label><textarea class="inp m3" id="ip0" rows="4" placeholder="Describe your image..."></textarea><label class="lb">Aspect Ratio</label><select class="inp m3" id="ir0"><option value="9:16">9:16 Vertical</option><option value="1:1">1:1 Square</option><option value="4:5">4:5 Portrait</option><option value="16:9">16:9 Landscape</option></select><div class="fx gc"><button class="btn bp" onclick="gImg()" style="flex:1">Generate</button><button class="btn bs" onclick="oP('ip0')">Optimize</button></div></div><div><div class="pv" id="ipv0">Generated image appears here</div></div></div></div></div>
+
+<div class="pg" id="p-videogen"><div class="ct"><div class="tabs m5" id="vt0"><div class="tab on" onclick="vtab(this,'tk')">TikTok / Reels</div><div class="tab" onclick="vtab(this,'yt')">YouTube Shorts</div><div class="tab" onclick="vtab(this,'dc')">Documentary</div></div>
+<div id="vt-tk"><div class="g2 g4x"><div class="cd"><div class="ch"><span class="ct-t">Kling Motion Control</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Character image + motion reference video → Kling masks movement onto character.</p><label class="lb">Model</label><select class="inp m3"><option>Kling 3.0 Motion Control</option><option>Kling 2.1 Master</option></select><div class="g2 gc m3"><div><label class="lb">Character Image</label><div class="uz" id="tkid0" onclick="document.getElementById('tkif0').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style="font-size:11px">Upload image</span><input type="file" id="tkif0" accept="image/*" style="display:none" onchange="tkIP(this)"></div></div><div><label class="lb">Motion Reference</label><div class="uz" id="tkvd0" onclick="document.getElementById('tkvf0').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span style="font-size:11px">Upload video</span><input type="file" id="tkvf0" accept="video/*" style="display:none" onchange="tkVP(this)"></div></div></div><label class="lb">Motion Guidance (Optional — helps Kling copy the motion accurately)</label><textarea class="inp m3" id="tkp0" rows="2" placeholder="e.g. Walking naturally, turning head to camera, dancing..."></textarea><button class="btn bp" onclick="gTkV()" style="width:100%">Generate Motion Video</button></div><div><div class="pv" id="tkpv0">Generated video appears here</div></div></div></div>
+<div id="vt-yt" style="display:none"><div class="cd"><div class="ch"><span class="ct-t">YouTube Shorts Pipeline</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Topic → scene breakdown → epic images → animate with Kling → narration (ElevenLabs) → animated subtitles → English + Spanish.</p><label class="lb">Topic or Script</label><textarea class="inp m3" id="yts0" rows="4" placeholder="e.g. '6 most powerful angels' or paste script..."></textarea><div class="g2 gc m3"><div><label class="lb">Language</label><select class="inp" id="ytl0"><option value="both">English + Spanish</option><option value="en">English</option><option value="es">Spanish</option></select></div><div><label class="lb">Art Style</label><select class="inp" id="yta0"><option value="biblical">Biblical Epic</option><option value="anime">Anime</option><option value="realistic">Photorealistic</option><option value="painterly">Dark Painterly</option></select></div></div><label class="lb">Subscribe CTA</label><input class="inp m3" id="ytc0" value="Comment AMEN and subscribe if you are saved by Jesus ✝"><button class="btn bp" onclick="gYTS()" style="width:100%">Generate Full Short</button><div id="yto0" class="mt3" style="display:none"></div></div></div>
+<div id="vt-dc" style="display:none"><div class="cd"><div class="em" style="padding:40px"><p style="font-size:13px;color:var(--text3);max-width:340px">Documentary pipeline ready. Send reference YouTube videos of the style you want. English only, 8-12 min.</p><textarea class="inp mt3" rows="3" placeholder="Paste reference YouTube links..." style="max-width:380px"></textarea></div></div></div>
+</div></div>
+
+<div class="pg" id="p-ads"><div class="ct"><div class="cd m4"><div class="ch"><span class="ct-t">Ad Creative Engine</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">FB Ad Library + Google Trends + competitor research → 10/10 ad copy.</p><div class="g2 gc m3"><div><label class="lb">Product</label><input class="inp" id="ap0" placeholder="e.g. Magnesium Complex"></div><div><label class="lb">Platform</label><select class="inp" id="apl0"><option>Facebook</option><option>TikTok</option><option>Instagram</option><option>YouTube</option></select></div></div><div class="m3"><label class="lb">Audience</label><input class="inp" id="aa0" placeholder="e.g. Health-conscious men 25-45..."></div><button class="btn bp" onclick="gAd()">Research &amp; Generate</button></div><div id="aro0"></div></div></div>
+
+<div class="pg" id="p-dropship"><div class="ct"><div class="tabs m5" id="dt0"><div class="tab on" onclick="dtab(this,'find')">Find Products</div><div class="tab" onclick="dtab(this,'val')">Validate</div><div class="tab" onclick="dtab(this,'store')">Build Store</div></div>
+<div id="dt-find" class="cd"><div class="ch"><span class="ct-t">Product Discovery</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Every product 10/10 or it doesn't show.</p><div class="g2 gc m3"><div><label class="lb">Niche</label><input class="inp" id="dn0" placeholder="Leave blank for all"></div><div><label class="lb">Budget</label><select class="inp" id="db0"><option>$5-15</option><option selected>$15-35</option><option>$35-75</option><option>Any</option></select></div></div><button class="btn bp" onclick="fProd()">Find Products</button><div id="dpo0" class="mt3"></div></div>
+<div id="dt-val" style="display:none" class="cd"><div class="ch"><span class="ct-t">Validate</span></div><label class="lb">Product</label><input class="inp m3" id="vp0" placeholder="AliExpress URL or name"><button class="btn bp" onclick="vProd()">Validate</button><div id="vpo0" class="mt3"></div></div>
+<div id="dt-store" style="display:none" class="cd"><div class="ch"><span class="ct-t">Store Builder</span></div><label class="lb">Product</label><input class="inp m3" id="sp0"><label class="lb">Description</label><textarea class="inp m3" id="sd0" rows="2"></textarea><label class="lb">Price</label><input class="inp m3" id="spr0" placeholder="$39.99"><button class="btn bp" onclick="bStore()">Generate</button><div id="sto0" class="mt3"></div></div>
+</div></div>
+
+<div class="pg" id="p-betting"><div class="ct">
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px" class="m5">
+<div class="sc"><div class="sn g" id="bw0">0</div><div class="sl">Wins</div></div>
+<div class="sc"><div class="sn r" id="bl0">0</div><div class="sl">Losses</div></div>
+<div class="sc"><div class="sn" id="bwr0">0%</div><div class="sl">Win Rate</div></div>
+<div class="sc"><div class="sn" id="bpnl0">$0</div><div class="sl">P&amp;L</div></div>
+<div class="sc"><div class="sn" id="bstr0">—</div><div class="sl">Streak</div></div>
+</div>
+<div class="cd m4"><div class="ch"><span class="ct-t">AI Parlay Engine</span><div class="fx gc"><button class="btn bp bsm" onclick="gPar()">Generate Today's Parlays</button><button class="btn bs bsm" onclick="checkRes()">Check Results</button></div></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Full methodology. Auto-logs parlays as pending. Hit "Check Results" after games finish to update W/L automatically.</p><div id="pro0"></div></div>
+<div class="cd"><div class="ch"><span class="ct-t">Bet History</span><button class="btn bs bsm" onclick="oM('mb0')">+ Log Bet</button></div><div id="bh0"></div></div>
+</div></div>
+
+<div class="pg" id="p-clone"><div class="ct"><div class="cd m4"><div class="ch"><span class="ct-t">Clone Projects</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Upload references (unlimited), paste URL or inspect code. One-to-one HTML.</p><label class="lb">Project</label><input class="inp m3" id="cn0" placeholder="e.g. Bashapp, Larpp"><label class="lb">URL</label><input class="inp m3" id="cu0" placeholder="https://cash.app"><label class="lb">Images</label><div class="uz m3" onclick="document.getElementById('clf0').click()"><span style="font-size:11px">Upload screenshots (unlimited)</span><input type="file" id="clf0" accept="image/*" multiple style="display:none" onchange="clIP(this)"></div><div id="clp0" class="fx gc m3" style="flex-wrap:wrap"></div><label class="lb">Inspect Code</label><textarea class="inp m3" id="cc0" rows="3" placeholder="Paste HTML/CSS..."></textarea><label class="lb">Instructions</label><textarea class="inp m3" id="cins0" rows="2"></textarea><button class="btn bp" onclick="clPr()">Generate HTML</button></div><div id="clo0" style="display:none" class="cd"><div class="ch"><span class="ct-t">Output</span><button class="btn bs bsm" onclick="navigator.clipboard.writeText(document.getElementById('clr0').textContent)">Copy</button></div><div class="cb" id="clr0"></div></div></div></div>
+
+<div class="pg" id="p-codelab"><div class="cw"><div class="cms" id="cm1"><div class="cm a fu"><div class="mw">Code Lab · Claude</div><div class="bbl">Uncapped session. Paste HTML, describe features. Ctrl+Enter.</div></div></div><div class="cbar"><div class="cbi"><div class="ib" onclick="document.getElementById('cof0').click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><input type="file" id="cof0" style="display:none" onchange="coFH(this)"></div><textarea id="coi0" placeholder="Code... (Ctrl+Enter)" rows="1" onkeydown="if(event.ctrlKey&&event.key==='Enter'){sCode();event.preventDefault()}" oninput="ar(this)"></textarea><button class="sb2" onclick="sCode()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div></div></div>
+
+<div class="pg" id="p-settings"><div class="ct"><h1 style="font-size:18px;margin-bottom:3px">Settings</h1><p style="color:var(--text3);font-size:12px;margin-bottom:20px">Keys stored locally. Never sent except to respective service.</p><div class="cd m4"><div class="ct-t m4">API Keys</div><div class="kr"><span class="kl">Anthropic</span><input class="inp" id="ka0" type="password" placeholder="sk-ant-..." onchange="sK()"><div class="kd" id="sa0"></div></div><div class="kr"><span class="kl">fal.ai</span><input class="inp" id="kf0" type="password" placeholder="fal key..." onchange="sK()"><div class="kd" id="sf0"></div></div><div class="kr"><span class="kl">ElevenLabs</span><input class="inp" id="ke0" type="password" placeholder="..." onchange="sK()"><div class="kd" id="se0"></div></div></div><div class="cd m4"><div class="ct-t m4">AI Model</div><div class="kr"><span class="kl">Default</span><select class="inp" id="km0" onchange="sK()"><option value="claude-opus-4-20250514">Claude Opus 4</option><option value="claude-sonnet-4-20250514">Claude Sonnet 4</option></select></div></div><button class="btn bd" onclick="clrAll()">Clear All Data</button></div></div>
+
+</div></div>
+
+<div class="mo" id="mc0"><div class="mb"><h3>New Character</h3><label class="lb">Name</label><input class="inp m3" id="mcn0" placeholder="e.g. Jewish Guy, Sofia"><label class="lb">Vibe / Personality</label><input class="inp m3" id="mcv0" placeholder="Confident, streetwear, NYC energy"><label class="lb">Style Notes (the more detail, the more consistent)</label><textarea class="inp m3" id="mcs0" rows="2" placeholder="Hair color, skin tone, facial features, fashion style, signature look..."></textarea><label class="lb">Reference Images (upload as many as possible — more refs = perfect 1:1 consistency, never drifts)</label><div class="uz m3" onclick="document.getElementById('mci0').click()"><span style="font-size:11px">Upload unlimited reference images</span><input type="file" id="mci0" accept="image/*" multiple style="display:none" onchange="chIP(this)"></div><div id="mcip0" class="fx gc m3" style="flex-wrap:wrap"></div><div class="fx jb"><button class="btn bg" onclick="cM('mc0')">Cancel</button><button class="btn bp" onclick="svCh()">Save Character</button></div></div></div>
+
+<div class="mo" id="mb0"><div class="mb"><h3>Log Bet</h3><label class="lb">Description</label><input class="inp m3" id="mbd0"><label class="lb">Stake</label><input class="inp m3" id="mbs0" type="number"><label class="lb">Result</label><select class="inp m3" id="mbr0"><option value="pending">Pending</option><option value="win">Win</option><option value="loss">Loss</option><option value="push">Push</option></select><label class="lb">Payout</label><input class="inp m3" id="mbp0" type="number"><label class="lb">Lessons</label><textarea class="inp m3" id="mbl0" rows="2"></textarea><div class="fx jb"><button class="btn bg" onclick="cM('mb0')">Cancel</button><button class="btn bp" onclick="lBet()">Save</button></div></div></div>
+
+<script>
+const SYS=`You are the AI engine inside Xylix OS for Garang. Xylix Labs (magnesium complex), Beauty, Audio, Core. Be indefatigable. 10/10. No shortcuts. Handle: research, ad copy, code, dropshipping, prompts, betting. When writing HTML/code, wrap complete HTML files in \`\`\`html code blocks so they render as previews. You can build full websites, components, and apps just like Claude does. For betting: PROVEN METHOD — all sports, injury splits 10+ games, blowout screening 80%+=alt lines, trap detection, no made-3s/double-doubles, path-to-win before Q4, 3 independent games, cross-sport OK, guaranteed-first 65-70%. For dropshipping: FIND 10/10 products. For clones: pixel-perfect HTML. BRANDS: Xylix Labs, Beauty, Audio, Core. PROJECTS: Larpp.io, Bashapp, Shopify clones. CONTENT: AI characters (Jewish Guy, AI girls) TikTok+Instagram — PERFECT 1:1 consistency, never drift. YOUTUBE: @RedeemedStoriesDaily, Bible shorts English+Spanish (animated video clips, not static images), documentary English only.`;
+let S={t:JSON.parse(localStorage.getItem('xt')||'[]'),c:JSON.parse(localStorage.getItem('xc')||'[]'),b:JSON.parse(localStorage.getItem('xb')||'[]'),ch:[],co:[],ci:[]};
+const TT={chat:['AI Chat','Claude Opus · Prompt Engineering'],daily:['Daily OS','High Priority · Get It Done'],models:['Model Studio','Characters · Consistency'],imagegen:['Image Gen','Flux 2 Pro · Nano Banana · Ideogram'],videogen:['Video Gen','Kling Motion · YouTube Shorts'],ads:['Ad Creative','Indefatigable Research'],dropship:['Drop Shipping','Find · Validate · Build'],betting:['Betting','AI Parlay Engine'],clone:['Clone Projects','Pixel-Perfect HTML'],codelab:['Code Lab','Uncapped Claude'],settings:['Settings','API Keys']};
+function go(p){document.querySelectorAll('.pg').forEach(e=>e.classList.remove('on'));document.querySelectorAll('.ni').forEach(e=>e.classList.remove('on'));document.getElementById('p-'+p)?.classList.add('on');document.querySelector(`[data-p="${p}"]`)?.classList.add('on');document.getElementById('pt').textContent=TT[p]?.[0]||'';document.getElementById('ps').textContent=TT[p]?.[1]||''}
+function gk(n){return localStorage.getItem('xk_'+n)||''}
+function x(s){return s?.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')||''}
+function fm(t){if(!t)return'';return t.replace(/```(\w*)\n([\s\S]*?)```/g,'<pre class="cb">$2</pre>').replace(/`([^`]+)`/g,'<code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:JetBrains Mono;font-size:12px">$1</code>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}
+function ar(e){e.style.height='auto';e.style.height=Math.min(e.scrollHeight,140)+'px'}
+function oM(id){document.getElementById(id).classList.add('sh')}
+function cM(id){document.getElementById(id).classList.remove('sh')}
+document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('sh')})});
+async function cl(msgs,sys=SYS,signal=null,webSearch=false){const k=gk('a');if(!k){alert('Add Anthropic key in Settings');go('settings');return null}try{
+// Try server route first (supports web search for live data)
+try{const opts={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs,system:sys,apiKey:k,useWebSearch:webSearch})};if(signal)opts.signal=signal;const r=await fetch('/api/claude',opts);const d=await r.json();if(d.error)throw new Error(d.error);return d.text||''}catch(se){
+// Fallback: direct API (works as standalone HTML, no web search)
+const opts={method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:localStorage.getItem('xk_m')||'claude-opus-4-20250514',max_tokens:4096,system:sys,messages:msgs})};if(signal)opts.signal=signal;const r=await fetch('https://api.anthropic.com/v1/messages',opts);const d=await r.json();if(d.error)throw new Error(d.error.message);return d.content?.map(c=>c.text).join('')||''}}catch(e){if(e.name==='AbortError')return'[Stopped]';return'Error: '+e.message}}
+async function fl(model,input){const k=gk('f');if(!k){alert('Add fal.ai key in Settings');go('settings');return null}try{const r=await fetch('https://queue.fal.run/'+model,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Key '+k},body:JSON.stringify(input)});return await r.json()}catch(e){return null}}
+let cImgs=[];function cImgH(i){cImgs=[];Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{cImgs.push(e.target.result)};r.readAsDataURL(f)})}
+let chatCtrl=null;
+function stopChat(){if(chatCtrl){chatCtrl.abort();chatCtrl=null}document.getElementById('stopBtn').style.display='none';document.getElementById('sendBtn').style.display='flex'}
+async function sChat(){const el=document.getElementById('ci0'),msg=el.value.trim();if(!msg&&!cImgs.length)return;el.value='';el.style.height='auto';document.getElementById('sendBtn').style.display='none';document.getElementById('stopBtn').style.display='flex';const a=document.getElementById('cm0');const ih=cImgs.map(i=>'<img src="'+i+'" style="max-width:100px;border-radius:6px;margin:3px">').join('');const u=document.createElement('div');u.className='cm u fu';u.innerHTML=`<div class="mw">You</div><div class="bbl">${x(msg)}${ih?'<br><div class="fx" style="flex-wrap:wrap">'+ih+'</div>':''}</div>`;a.appendChild(u);a.scrollTop=a.scrollHeight;const c=[];cImgs.forEach(i=>{const[m,b]=i.split(',');c.push({type:'image',source:{type:'base64',media_type:m.match(/:(.*?);/)?.[1]||'image/jpeg',data:b}})});cImgs=[];if(msg)c.push({type:'text',text:msg});S.ch.push({role:'user',content:c});const l=document.createElement('div');l.className='cm a fu';l.innerHTML='<div class="mw">Xylix OS · Claude</div><div class="bbl"><div class="ld"></div></div>';a.appendChild(l);a.scrollTop=a.scrollHeight;chatCtrl=new AbortController();const r=await cl(S.ch,SYS,chatCtrl.signal);chatCtrl=null;document.getElementById('stopBtn').style.display='none';document.getElementById('sendBtn').style.display='flex';S.ch.push({role:'assistant',content:r||'Error.'});let html=fm(r||'Error.');const codeMatch=r?.match(/```html\n([\s\S]*?)```/);if(codeMatch){html+=`<div style="margin-top:10px;border:1px solid var(--border);border-radius:var(--rs);overflow:hidden"><div style="padding:6px 10px;background:var(--bg3);font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between;align-items:center">Preview<button class="btn bs bsm" onclick="this.closest('.cm').querySelector('iframe').style.display=this.closest('.cm').querySelector('iframe').style.display==='none'?'block':'none'">Toggle</button></div><iframe srcdoc="${codeMatch[1].replace(/"/g,'&quot;')}" style="width:100%;height:400px;border:none;background:#fff" sandbox="allow-scripts"></iframe></div>`}l.querySelector('.bbl').innerHTML=html;a.scrollTop=a.scrollHeight}
+let coF=null;function coFH(i){if(i.files[0]){const r=new FileReader();r.onload=e=>{coF={n:i.files[0].name,c:e.target.result}};r.readAsText(i.files[0])}}
+async function sCode(){const el=document.getElementById('coi0'),msg=el.value.trim();if(!msg&&!coF)return;el.value='';el.style.height='auto';const a=document.getElementById('cm1');let d=msg,f=msg;if(coF){d+='\n📎 '+coF.n;f+='\n\nFile: '+coF.n+'\n```\n'+coF.c+'\n```';coF=null}const u=document.createElement('div');u.className='cm u fu';u.innerHTML=`<div class="mw">You</div><div class="bbl">${x(d)}</div>`;a.appendChild(u);a.scrollTop=a.scrollHeight;S.co.push({role:'user',content:f});const l=document.createElement('div');l.className='cm a fu';l.innerHTML='<div class="mw">Code Lab · Claude</div><div class="bbl"><div class="ld"></div></div>';a.appendChild(l);a.scrollTop=a.scrollHeight;const r=await cl(S.co,SYS+'\nCODE LAB: Clean production code. Pixel-perfect. Complete files.');S.co.push({role:'assistant',content:r||'Error.'});l.querySelector('.bbl').innerHTML=fm(r||'Error.');a.scrollTop=a.scrollHeight}
+function rT(){const l=document.getElementById('tl0'),t=S.t,p=t.filter(x=>!x.d),d=t.filter(x=>x.d);document.getElementById('dc').textContent=p.length+' remaining · '+d.length+' done';l.innerHTML=[...p,...d].map(z=>{const i=t.indexOf(z);return`<div class="tr ${z.d?'dn':''}"><div class="tc ${z.d?'dn':''}" onclick="tgT(${i})"></div><span class="tl">${x(z.t)}</span><span class="tt">High</span><button class="tx" onclick="dT(${i})">✕</button></div>`}).join('')}
+function aT(){const el=document.getElementById('ti0'),t=el.value.trim();if(!t)return;S.t.push({t,d:false});el.value='';localStorage.setItem('xt',JSON.stringify(S.t));rT();sbSyncTasks()}
+function tgT(i){S.t[i].d=!S.t[i].d;localStorage.setItem('xt',JSON.stringify(S.t));rT();sbSyncTasks()}
+function dT(i){const task=S.t[i];if(task.sbId)sbFetch('tasks?id=eq.'+task.sbId,'DELETE');S.t.splice(i,1);localStorage.setItem('xt',JSON.stringify(S.t));rT()}
+function rC(){const g=document.getElementById('cg0');['gc0','ic0'].forEach(id=>{const s=document.getElementById(id);if(!s)return;s.innerHTML='<option value="">None</option>'+S.c.map(c=>'<option>'+x(c.n)+'</option>').join('')});if(!S.c.length){g.innerHTML='<div class="em" style="grid-column:1/-1"><p>No characters yet.</p></div>';return}g.innerHTML=S.c.map((c,i)=>`<div class="cc"><div class="cth">${c.i?.[0]?'<img src="'+c.i[0]+'">':'No images'}</div><div class="cbd"><div class="cnm">${x(c.n)}</div><div class="cvb">${x(c.v)}</div><div style="margin-top:4px;font-size:10px;color:var(--text3)">${c.i?.length||0} refs</div><button class="btn bg bsm mt3" onclick="dCh(${i})">Delete</button></div></div>`).join('')}
+function chIP(i){const p=document.getElementById('mcip0');p.innerHTML='';Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:50px;height:50px;object-fit:cover;border-radius:5px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)})}
+function svCh(){const n=document.getElementById('mcn0').value.trim(),v=document.getElementById('mcv0').value.trim(),s=document.getElementById('mcs0').value.trim();if(!n)return;const fi=document.getElementById('mci0'),imgs=[];Promise.all(Array.from(fi.files).map(f=>new Promise(r=>{const rd=new FileReader();rd.onload=e=>{imgs.push(e.target.result);r()};rd.readAsDataURL(f)}))).then(async ()=>{S.c.push({n,v,s,i:imgs});localStorage.setItem('xc',JSON.stringify(S.c));cM('mc0');rC();const r=await sbFetch('characters','POST',{name:n,vibe:v,style:s,images:imgs});if(r&&r[0])S.c[S.c.length-1].sbId=r[0].id;localStorage.setItem('xc',JSON.stringify(S.c))})}
+function dCh(i){const ch=S.c[i];if(ch.sbId)sbFetch('characters?id=eq.'+ch.sbId,'DELETE');S.c.splice(i,1);localStorage.setItem('xc',JSON.stringify(S.c));rC()}
+async function gPlan(){const ch=document.getElementById('gc0').value;if(!ch)return;const c=S.c.find(z=>z.n===ch),o=document.getElementById('po0');o.style.display='block';o.innerHTML='<div class="ld"></div> Generating...';const r=await cl([{role:'user',content:`Content plan: ${c.n}\nVibe: ${c.v}\nStyle: ${c.s}\nPlatform: ${document.getElementById('gp0').value}\nScene: ${document.getElementById('gs0').value||'best recommendation'}\n\n1. FLUX IMAGE PROMPT\n2. KLING VIDEO PROMPT\n3. INSTAGRAM CAPTION\n4. TIKTOK CAPTION\n5. POSTING STRATEGY`}]);o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
+const STY={biblical:'Epic biblical painting, golden divine light, ornate armor, heavenly clouds, cinematic, ',instagram:'Natural DSLR, shallow DOF, golden hour, candid, ',product:'Studio photography, clean background, commercial, ',tiktok:'Casual street, authentic, natural light, '};
+let imgRefs=[];
+function imgRefPv(i){const p=document.getElementById('irp0');imgRefs=[];p.innerHTML='';const files=Array.from(i.files).slice(0,6);files.forEach(f=>{const r=new FileReader();r.onload=e=>{imgRefs.push(e.target.result);const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:50px;height:50px;object-fit:cover;border-radius:5px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)});if(i.files.length>6)alert('Max 6 reference images. Using first 6.')}
+async function gImg(){const m=document.getElementById('im0').value;let p=document.getElementById('ip0').value.trim();const r=document.getElementById('ir0').value,s=document.getElementById('is0').value;if(!p&&!imgRefs.length)return;if(s&&STY[s])p=STY[s]+p;const pv=document.getElementById('ipv0');pv.innerHTML='<div class="ld"></div>';if(imgRefs.length>0){const content=[];imgRefs.forEach(i=>{const[mt,b]=i.split(',');content.push({type:'image',source:{type:'base64',media_type:mt.match(/:(.*?);/)?.[1]||'image/jpeg',data:b}})});content.push({type:'text',text:`Generate the PERFECT Flux image prompt based on these ${imgRefs.length} reference images. The user wants: ${p||'match the reference images exactly'}. Output ONLY the optimized prompt, nothing else. Include every detail: pose, lighting, expression, clothing, background, camera angle, mood.`});const optimized=await cl([{role:'user',content}]);if(optimized&&!optimized.startsWith('Error')){p=optimized}}const sz={'9:16':'portrait_16_9','1:1':'square','4:5':'portrait_4_3','16:9':'landscape_16_9'};const res=await fl(m,{prompt:p,image_size:sz[r]||'square',num_images:1});if(res?.images?.[0]?.url)pv.innerHTML='<img src="'+res.images[0].url+'">';else pv.innerHTML='<span style="color:var(--red)">Failed</span>'}
+async function oP(id){const el=document.getElementById(id),o=el.value.trim();if(!o)return;el.value='Optimizing...';const r=await cl([{role:'user',content:'Optimize this prompt for max quality. Output ONLY the prompt.\n\nOriginal: '+o}]);el.value=r||o}
+function vtab(el,t){document.querySelectorAll('#vt0 .tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');['tk','yt','dc'].forEach(x=>document.getElementById('vt-'+x).style.display=x===t?'block':'none')}
+let tkI=null;function tkIP(i){if(!i.files[0])return;const r=new FileReader();r.onload=e=>{tkI=e.target.result;document.getElementById('tkid0').innerHTML='<img src="'+e.target.result+'" style="max-width:100%;max-height:80px;border-radius:5px">'};r.readAsDataURL(i.files[0])}
+function tkVP(i){if(!i.files[0])return;document.getElementById('tkvd0').innerHTML='<span style="font-size:11px">✓ '+i.files[0].name+'</span>'}
+async function gTkV(){if(!tkI){alert('Upload image');return}const pv=document.getElementById('tkpv0');pv.innerHTML='<div class="ld"></div> Generating...';const r=await fl('fal-ai/kling-video/v3/motion-control',{prompt:document.getElementById('tkp0').value||'Copy the exact motion from the reference video naturally',image_url:tkI,aspect_ratio:'9:16'});if(r?.video?.url)pv.innerHTML='<video src="'+r.video.url+'" controls autoplay style="max-height:380px"></video>';else pv.innerHTML='<span style="color:var(--red)">Failed. '+(r?.detail||JSON.stringify(r))+'</span>'}
+async function gYTS(){const s=document.getElementById('yts0').value.trim();if(!s)return;const o=document.getElementById('yto0');o.style.display='block';o.innerHTML='<div class="ld"></div> Building scenes...';const st={biblical:'Epic biblical, golden divine light, ornate armor, cinematic 9:16',anime:'Anime, vibrant, dramatic 9:16',realistic:'Photorealistic cinematic 9:16',painterly:'Dark Renaissance oil painting 9:16'};const r=await cl([{role:'user',content:`Viral YouTube Shorts producer. Christian/Bible content.\nTOPIC: ${s}\nSTYLE: ${st[document.getElementById('yta0').value]}\nLANG: ${document.getElementById('ytl0').value==='both'?'English+Spanish':'English'}\n\nBreak into 4-8 scenes. Each scene needs:\n1. NARRATION TEXT (English)${document.getElementById('ytl0').value!=='en'?'\n2. SPANISH NARRATION':''}  \n3. FLUX 2 PRO IMAGE PROMPT (locked style prefix across ALL scenes for consistency)\n4. KLING ANIMATION PROMPT (subtle motion: slow zoom, parallax, light flicker, fabric movement — makes the image feel alive, not static)\n5. BOLD TEXT OVERLAY (e.g. "NUMBER FOUR: URIEL.")\n6. TRANSITION (zoom, fade, swipe between scenes)\n\nCRITICAL RULES:\n- First 3 seconds = VISUAL HOOK. Most dramatic/epic image before narration starts.\n- Each scene is an ANIMATED VIDEO CLIP (8-15 sec), not a static image. Use Kling to add subtle cinematic motion.\n- Animated subtitles: bold white, key words (names, divine actions) highlighted in GOLD, pop-on-beat timing.\n- All image prompts share the EXACT SAME style prefix so every frame looks like one video.\n- ~60 seconds total.\n- CTA at end: "${document.getElementById('ytc0').value}"\n- Narrator voice: deep, dramatic, authoritative. ElevenLabs.\n- For Spanish: separate narration track, same visuals.`}]);o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
+async function gAd(){const p=document.getElementById('ap0').value.trim();if(!p)return;const o=document.getElementById('aro0');o.innerHTML='<div class="cd"><div class="ld"></div> Researching...</div>';const r=await cl([{role:'user',content:`INDEFATIGABLE ad research: ${p}\nPlatform: ${document.getElementById('apl0').value}\nAudience: ${document.getElementById('aa0').value||'determine best'}\n\n1. MARKET ANALYSIS\n2. COMPETITOR ANALYSIS\n3. AD COPY (3 variations)\n4. VIDEO SCRIPT\n5. IMAGE PROMPT\n6. TARGETING`}],SYS,null,true);o.innerHTML='<div class="cd">'+fm(r)+'</div>'}
+function dtab(el,t){document.querySelectorAll('#dt0 .tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');['find','val','store'].forEach(x=>document.getElementById('dt-'+x).style.display=x===t?'block':'none')}
+async function fProd(){const o=document.getElementById('dpo0');o.innerHTML='<div class="ld"></div>';const r=await cl([{role:'user',content:`FIND winning dropshipping products.\nNiche: ${document.getElementById('dn0').value||'All'}\nBudget: ${document.getElementById('db0').value}\nFB Ad Library, Trends, velocity, margins. EVERY product 10/10.`}],SYS,null,true);o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
+async function vProd(){const p=document.getElementById('vp0').value.trim();if(!p)return;const o=document.getElementById('vpo0');o.innerHTML='<div class="ld"></div>';const r=await cl([{role:'user',content:`Validate: ${p}\nFB Ad Library, Trends, velocity, competition, margins. VERDICT: X/10.`}],SYS,null,true);o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
+async function bStore(){const p=document.getElementById('sp0').value.trim();if(!p)return;const o=document.getElementById('sto0');o.innerHTML='<div class="ld"></div>';const r=await cl([{role:'user',content:`PERFECT Shopify landing page:\nProduct: ${p}\nDesc: ${document.getElementById('sd0').value}\nPrice: ${document.getElementById('spr0').value}\nAbove fold, conversion-optimized, mobile-first. Complete HTML.`}]);o.innerHTML='<div class="cd" style="background:var(--bg2)"><div class="cb">'+x(r)+'</div></div>'}
+function rB(){const b=S.b,w=b.filter(x=>x.r==='win').length,l=b.filter(x=>x.r==='loss').length,t=w+l;const pnl=b.reduce((s,z)=>{if(z.r==='win')return s+((z.p||0)-(z.s||0));if(z.r==='loss')return s-(z.s||0);return s},0);document.getElementById('bw0').textContent=w;document.getElementById('bl0').textContent=l;document.getElementById('bwr0').textContent=t>0?Math.round(w/t*100)+'%':'0%';const pe=document.getElementById('bpnl0');pe.textContent=(pnl>=0?'+$':'-$')+Math.abs(pnl).toFixed(2);pe.className='sn '+(pnl>=0?'g':'r');
+// Streak calc
+const settled=b.filter(z=>z.r==='win'||z.r==='loss');let streak=0,streakType='';if(settled.length){const last=settled[settled.length-1].r;streakType=last;streak=1;for(let i=settled.length-2;i>=0;i--){if(settled[i].r===last)streak++;else break}}const strEl=document.getElementById('bstr0');strEl.textContent=streak>0?(streakType==='win'?'W':'L')+streak:'—';strEl.className='sn '+(streakType==='win'?'g':streakType==='loss'?'r':'');
+const h=document.getElementById('bh0');if(!b.length){h.innerHTML='<div class="em"><p>No bets yet.</p></div>';return}h.innerHTML=[...b].reverse().map((z,i)=>{const idx=b.length-1-i;const col=z.r==='win'?'var(--gb)':z.r==='loss'?'var(--rb)':z.r==='pending'?'var(--yb)':'var(--bg3)';const tcol=z.r==='win'?'var(--gt)':z.r==='loss'?'var(--rt)':z.r==='pending'?'var(--yellow)':'var(--text3)';return`<div class="tr"><span class="tt" style="background:${col};color:${tcol}">${z.r.toUpperCase()}</span><span class="tl">${x(z.d)}</span><span style="color:var(--text3);font-size:12px;font-family:JetBrains Mono">$${z.s}${z.r==='win'?' → $'+z.p:''}</span></div>`}).join('')}
+async function gPar(){const o=document.getElementById('pro0');o.innerHTML='<div class="ld"></div> Full analysis — injuries, splits, blowout screening, alt lines, traps...';
+// Time-awareness: Central Time (Ames, Iowa = UTC-6 CST / UTC-5 CDT)
+const now=new Date();const ct=new Date(now.toLocaleString('en-US',{timeZone:'America/Chicago'}));const hour=ct.getHours();const isLate=hour>=22||hour<6;
+const dateStr=isLate?new Date(ct.getTime()+86400000).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):ct.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+const timeNote=isLate?'It is late night Central Time. Today\'s games are done. Analyze TOMORROW\'S slate ('+dateStr+').':'Current time: '+ct.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' Central. Analyze today\'s slate ('+dateStr+').';
+const ls=S.b.filter(b=>b.l).map(b=>`${b.r.toUpperCase()}: ${b.d} — ${b.l}`).join('\n');
+// Remove previous pending parlays (refresh replaces)
+S.b=S.b.filter(z=>z.r!=='pending'||!z.auto);localStorage.setItem('xb',JSON.stringify(S.b));
+const r=await cl([{role:'user',content:`Elite analyst. ${timeNote}\nBest DraftKings parlays.\nNot content writer. Sharp friend minimizing bullshit.\n\nPROCESS: (1) Injury check ALL sports (2) Win prob + blowout 80%+=alt lines. KAT 22/22.5 lesson. Jokic 8pts lesson. (3) Teammate splits 10+ games (4) Matchup/opponent analysis (5) Exact DK alt lines (6) Path-to-win before Q4 (7) Trap detection — no made-3s, double-doubles, assist-dependent (8) Cross-sport if strong legs exist\n\nPhilosophy: Guaranteed-first. Small consistent wins. 65-70% confidence. Only as many parlays as make sense.\n\n${ls?'LESSONS FROM PAST BETS:\n'+ls+'\n':''}OUTPUT FORMAT:\n**SLATE + WIN PROBABILITIES** (every game with blowout flags)\n**CANDIDATE BREAKDOWN** (detailed analysis per candidate)\n**TIER RANKING** (Tier 1: best, Tier 2: viable, Tier 3: traps)\n**PARLAY 1 — SAFEST** (3 legs, exact props/thresholds, reasoning, what kills it)\n**PARLAY 2 — MORE PAYOUT** (3 legs, added risk honest)\n**STRONGEST STANDALONE LEG**\n\nIMPORTANT: At the very end, output a JSON block wrapped in \`\`\`json tags with this exact format for auto-logging:\n{"parlays":[{"name":"Parlay 1","legs":["Leg description 1","Leg description 2","Leg description 3"],"stake":25},{"name":"Parlay 2","legs":["Leg 1","Leg 2","Leg 3"],"stake":25}]}`}],SYS,null,true);
+o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>';
+// Auto-log parlays as pending
+try{const jm=r.match(/```json\n([\s\S]*?)```/);if(jm){const pd=JSON.parse(jm[1]);if(pd.parlays){pd.parlays.forEach(p=>{S.b.push({d:p.name+': '+p.legs.join(' + '),s:p.stake||25,r:'pending',p:0,l:'',auto:true,date:dateStr})})}localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets()}}catch(e){console.log('Auto-log parse error',e)}}
+async function checkRes(){const pending=S.b.filter(z=>z.r==='pending');if(!pending.length){alert('No pending bets to check');return}const o=document.getElementById('pro0');o.innerHTML='<div class="ld"></div> Checking final scores and updating results...';const descs=pending.map(z=>z.d).join('\n');const r=await cl([{role:'user',content:`Check the final results for these pending bets. For each bet, determine if it WON, LOST, or PUSHED based on actual final box scores and stats.\n\nPENDING BETS:\n${descs}\n\nFor each bet, output a JSON block:\n\`\`\`json\n{"results":[{"desc":"exact bet description","result":"win or loss or push","payout":68.22,"lesson":"what we learned"}]}\n\`\`\`\n\nBe accurate. Check real final stats. If a game hasn't finished yet, mark as "pending".`}],SYS,null,true);
+o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>';
+try{const jm=r.match(/```json\n([\s\S]*?)```/);if(jm){const res=JSON.parse(jm[1]);if(res.results){res.results.forEach(rr=>{const match=S.b.find(z=>z.r==='pending'&&z.d.includes(rr.desc?.substring(0,20)));if(match&&rr.result!=='pending'){match.r=rr.result;match.p=rr.payout||0;match.l=rr.lesson||''}});localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets()}}}catch(e){console.log('Results parse error',e)}}
+function lBet(){const b={d:document.getElementById('mbd0').value.trim(),s:parseFloat(document.getElementById('mbs0').value)||0,r:document.getElementById('mbr0').value,p:parseFloat(document.getElementById('mbp0').value)||0,l:document.getElementById('mbl0').value.trim()};if(!b.d)return;S.b.push(b);localStorage.setItem('xb',JSON.stringify(S.b));cM('mb0');rB();sbSyncBets()}
+function clIP(i){const p=document.getElementById('clp0');S.ci=[];p.innerHTML='';Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{S.ci.push(e.target.result);const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)})}
+async function clPr(){const n=document.getElementById('cn0').value.trim(),u=document.getElementById('cu0').value.trim(),c=document.getElementById('cc0').value.trim(),ins=document.getElementById('cins0').value.trim();if(!n&&!u&&!S.ci.length)return;const o=document.getElementById('clo0');o.style.display='block';document.getElementById('clr0').textContent='Generating...';const ct=[];S.ci.forEach(i=>{const[m,b]=i.split(',');ct.push({type:'image',source:{type:'base64',media_type:m.match(/:(.*?);/)?.[1]||'image/png',data:b}})});ct.push({type:'text',text:`Clone ONE-TO-ONE HTML.\nProject: ${n||'Clone'}\n${u?'URL: '+u:''}\n${c?'Code:\n'+c:''}\n${ins?'Instructions: '+ins:''}\nPixel perfect. Complete HTML+CSS+JS.`});const r=await cl([{role:'user',content:ct}]);document.getElementById('clr0').textContent=r||'Error.'}
+function sK(){['a','f','e'].forEach(k=>{const v=document.getElementById('k'+k+'0').value;if(v)localStorage.setItem('xk_'+k,v);document.getElementById('s'+k+'0').className='kd '+(v?'y':'n')});localStorage.setItem('xk_m',document.getElementById('km0').value)}
+function lK(){['a','f','e'].forEach(k=>{const v=localStorage.getItem('xk_'+k)||'';document.getElementById('k'+k+'0').value=v;document.getElementById('s'+k+'0').className='kd '+(v?'y':'n')});document.getElementById('km0').value=localStorage.getItem('xk_m')||'claude-opus-4-20250514'}
+function clrAll(){if(!confirm('Clear ALL data?'))return;['xt','xc','xb','xk_a','xk_f','xk_e','xk_m'].forEach(k=>localStorage.removeItem(k));sbClear();location.reload()}
+
+// SUPABASE PERSISTENCE
+const SB_URL='https://vhypjmqwioimwzssjusb.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeXBqbXF3aW9pbXd6c3NqdXNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTIxNTQsImV4cCI6MjA4OTQ2ODE1NH0.yN-9vzzF1kLvi3BVAtpQ4tDGZ1BHtXvkpjBXX3q2ewA';
+async function sbFetch(table,method='GET',body=null){
+  try{const opts={method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':''}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(SB_URL+'/rest/v1/'+table,opts);
+  return await r.json()}catch(e){console.log('Supabase error:',e);return null}}
+
+async function sbSyncTasks(){
+  const tasks=S.t;
+  // Upsert all tasks
+  for(const t of tasks){
+    if(!t.sbId){
+      const r=await sbFetch('tasks','POST',{text:t.t,done:t.d||false});
+      if(r&&r[0])t.sbId=r[0].id;
+    }else{
+      await sbFetch('tasks?id=eq.'+t.sbId,'PATCH',{done:t.d||false});
+    }
+  }
+  localStorage.setItem('xt',JSON.stringify(S.t));
+}
+
+async function sbSyncBets(){
+  for(const b of S.b){
+    if(!b.sbId){
+      const r=await sbFetch('bets','POST',{description:b.d,stake:b.s,result:b.r,payout:b.p,lesson:b.l||'',auto_generated:b.auto||false,date_label:b.date||''});
+      if(r&&r[0])b.sbId=r[0].id;
+    }else{
+      await sbFetch('bets?id=eq.'+b.sbId,'PATCH',{result:b.r,payout:b.p,lesson:b.l||''});
+    }
+  }
+  localStorage.setItem('xb',JSON.stringify(S.b));
+}
+
+async function sbLoadAll(){
+  try{
+    // Load tasks
+    const tasks=await sbFetch('tasks?order=created_at.asc');
+    if(tasks&&Array.isArray(tasks)&&tasks.length>0){
+      S.t=tasks.map(t=>({t:t.text,d:t.done,sbId:t.id}));
+      localStorage.setItem('xt',JSON.stringify(S.t));rT();
+    }
+    // Load bets
+    const bets=await sbFetch('bets?order=created_at.asc');
+    if(bets&&Array.isArray(bets)&&bets.length>0){
+      S.b=bets.map(b=>({d:b.description,s:b.stake,r:b.result,p:b.payout,l:b.lesson,auto:b.auto_generated,date:b.date_label,sbId:b.id}));
+      localStorage.setItem('xb',JSON.stringify(S.b));rB();
+    }
+    // Load characters
+    const chars=await sbFetch('characters?order=created_at.asc');
+    if(chars&&Array.isArray(chars)&&chars.length>0){
+      S.c=chars.map(c=>({n:c.name,v:c.vibe,s:c.style,i:c.images||[],sbId:c.id}));
+      localStorage.setItem('xc',JSON.stringify(S.c));rC();
+    }
+    // Load API keys
+    const keys=await sbFetch('settings');
+    if(keys&&Array.isArray(keys)){
+      keys.forEach(k=>{
+        if(k.key_name==='anthropic')localStorage.setItem('xk_a',k.key_value);
+        if(k.key_name==='fal')localStorage.setItem('xk_f',k.key_value);
+        if(k.key_name==='elevenlabs')localStorage.setItem('xk_e',k.key_value);
+        if(k.key_name==='model')localStorage.setItem('xk_m',k.key_value);
+      });
+      lK();
+    }
+  }catch(e){console.log('Supabase load error:',e)}
+}
+
+async function sbClear(){
+  await sbFetch('tasks','DELETE');await sbFetch('bets','DELETE');
+  await sbFetch('characters','DELETE');await sbFetch('settings','DELETE');
+}
+
+// Override save functions to also sync to Supabase
+const origSK=sK;
+sK=function(){origSK();
+  const keys=[{key_name:'anthropic',key_value:gk('a')},{key_name:'fal',key_value:gk('f')},{key_name:'elevenlabs',key_value:gk('e')},{key_name:'model',key_value:localStorage.getItem('xk_m')||''}];
+  keys.forEach(async k=>{if(k.key_value)await sbFetch('settings','POST',{...k}).catch(()=>sbFetch('settings?key_name=eq.'+k.key_name,'PATCH',{key_value:k.key_value}))});
+}
+
+// INIT
+(function(){
+  document.getElementById('dd').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  lK();rT();rC();rB();
+  // Load from Supabase (async, overwrites localStorage if data exists)
+  sbLoadAll();
+})();
+</script>
+</body>
+</html>
