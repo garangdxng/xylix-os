@@ -162,7 +162,17 @@ select.inp{cursor:pointer;appearance:none;background-image:url("data:image/svg+x
 <div class="sc"><div class="sn" id="bpnl0">$0</div><div class="sl">P&amp;L</div></div>
 <div class="sc"><div class="sn" id="bstr0">—</div><div class="sl">Streak</div></div>
 </div>
-<div class="cd m4"><div class="ch"><span class="ct-t">AI Parlay Engine</span><div class="fx gc"><button class="btn bp bsm" onclick="gPar()">Generate Today's Parlays</button><button class="btn bs bsm" onclick="checkRes()">Check Results</button></div></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Full methodology. Auto-logs parlays as pending. Hit "Check Results" after games finish to update W/L automatically.</p><div id="pro0"></div></div>
+<div class="cd m4"><div class="ch"><span class="ct-t">AI Parlay Engine</span><div class="fx gc"><button class="btn bp bsm" id="parGenBtn" onclick="gPar()">Generate Today's Parlays</button><button class="btn bs bsm" onclick="checkRes()">Check Results</button></div></div>
+<p style="color:var(--text3);font-size:12px;margin-bottom:14px">Multi-step research: injuries → player stats → DraftKings lines → build parlays. All prop types. Auto-logs as pending.</p>
+<div id="parProgress" style="display:none" class="m4"><div style="background:var(--bg3);border-radius:var(--rx);padding:12px">
+<div style="font-size:12px;font-weight:600;margin-bottom:8px">Research in progress...</div>
+<div id="parStep" style="font-size:11px;color:var(--text3)">Starting...</div>
+<div style="background:var(--border);height:4px;border-radius:2px;margin-top:8px;overflow:hidden"><div id="parBar" style="background:var(--accent);height:100%;width:0%;border-radius:2px;transition:width .3s"></div></div>
+</div></div>
+<div id="parCards" style="display:none" class="m4"></div>
+<div id="parWatch" style="display:none" class="m4"></div>
+<details id="parDetails" style="display:none" class="m4"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);padding:8px 0">View Full Research Analysis</summary><div id="parResearch" style="padding-top:8px"></div></details>
+</div>
 <div class="cd"><div class="ch"><span class="ct-t">Bet History</span><button class="btn bs bsm" onclick="oM('mb0')">+ Log Bet</button></div><div id="bh0"></div></div>
 </div></div>
 
@@ -229,22 +239,135 @@ async function bStore(){const p=document.getElementById('sp0').value.trim();if(!
 function rB(){const b=S.b,w=b.filter(x=>x.r==='win').length,l=b.filter(x=>x.r==='loss').length,t=w+l;const pnl=b.reduce((s,z)=>{if(z.r==='win')return s+((z.p||0)-(z.s||0));if(z.r==='loss')return s-(z.s||0);return s},0);document.getElementById('bw0').textContent=w;document.getElementById('bl0').textContent=l;document.getElementById('bwr0').textContent=t>0?Math.round(w/t*100)+'%':'0%';const pe=document.getElementById('bpnl0');pe.textContent=(pnl>=0?'+$':'-$')+Math.abs(pnl).toFixed(2);pe.className='sn '+(pnl>=0?'g':'r');
 // Streak calc
 const settled=b.filter(z=>z.r==='win'||z.r==='loss');let streak=0,streakType='';if(settled.length){const last=settled[settled.length-1].r;streakType=last;streak=1;for(let i=settled.length-2;i>=0;i--){if(settled[i].r===last)streak++;else break}}const strEl=document.getElementById('bstr0');strEl.textContent=streak>0?(streakType==='win'?'W':'L')+streak:'—';strEl.className='sn '+(streakType==='win'?'g':streakType==='loss'?'r':'');
-const h=document.getElementById('bh0');if(!b.length){h.innerHTML='<div class="em"><p>No bets yet.</p></div>';return}h.innerHTML=[...b].reverse().map((z,i)=>{const idx=b.length-1-i;const col=z.r==='win'?'var(--gb)':z.r==='loss'?'var(--rb)':z.r==='pending'?'var(--yb)':'var(--bg3)';const tcol=z.r==='win'?'var(--gt)':z.r==='loss'?'var(--rt)':z.r==='pending'?'var(--yellow)':'var(--text3)';return`<div class="tr"><span class="tt" style="background:${col};color:${tcol}">${z.r.toUpperCase()}</span><span class="tl">${x(z.d)}</span><span style="color:var(--text3);font-size:12px;font-family:JetBrains Mono">$${z.s}${z.r==='win'?' → $'+z.p:''}</span></div>`}).join('')}
-async function gPar(){const o=document.getElementById('pro0');o.innerHTML='<div class="ld"></div> Full analysis — injuries, splits, blowout screening, alt lines, traps...';
-// Time-awareness: Central Time (Ames, Iowa = UTC-6 CST / UTC-5 CDT)
+const h=document.getElementById('bh0');if(!b.length){h.innerHTML='<div class="em"><p>No bets yet.</p></div>';return}h.innerHTML=[...b].reverse().map((z,i)=>{const idx=b.length-1-i;const col=z.r==='win'?'var(--gb)':z.r==='loss'?'var(--rb)':z.r==='pending'?'var(--yb)':'var(--bg3)';const tcol=z.r==='win'?'var(--gt)':z.r==='loss'?'var(--rt)':z.r==='pending'?'var(--yellow)':'var(--text3)';const ptypes=z.propTypes?`<div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap">${z.propTypes.split(',').filter(Boolean).map(t=>'<span style="font-size:9px;background:var(--bg3);color:var(--text3);padding:1px 5px;border-radius:3px">'+x(t)+'</span>').join('')}</div>`:'';return`<div class="tr"><span class="tt" style="background:${col};color:${tcol}">${z.r.toUpperCase()}</span><span class="tl">${x(z.d)}${ptypes}</span><span style="color:var(--text3);font-size:12px;font-family:JetBrains Mono">$${z.s}${z.r==='win'?' → $'+z.p:''}</span></div>`}).join('')}
+async function gPar(){
+const prog=document.getElementById('parProgress');
+const step=document.getElementById('parStep');
+const bar=document.getElementById('parBar');
+const cards=document.getElementById('parCards');
+const watch=document.getElementById('parWatch');
+const details=document.getElementById('parDetails');
+const research=document.getElementById('parResearch');
+document.getElementById('parGenBtn').disabled=true;
+prog.style.display='block';cards.style.display='none';watch.style.display='none';details.style.display='none';
+
 const now=new Date();const ct=new Date(now.toLocaleString('en-US',{timeZone:'America/Chicago'}));const hour=ct.getHours();const isLate=hour>=22||hour<6;
 const dateStr=isLate?new Date(ct.getTime()+86400000).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):ct.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-const timeNote=isLate?'It is late night Central Time. Today\'s games are done. Analyze TOMORROW\'S slate ('+dateStr+').':'Current time: '+ct.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' Central. Analyze today\'s slate ('+dateStr+').';
+const timeNote=isLate?'It is late night Central Time. Games are done. Analyze TOMORROW ('+dateStr+').':'Today is '+dateStr+'. Current time: '+ct.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' Central.';
 const ls=S.b.filter(b=>b.l).map(b=>`${b.r.toUpperCase()}: ${b.d} — ${b.l}`).join('\n');
-// Remove previous pending parlays (refresh replaces)
+const propHist=S.b.filter(b=>b.r==='win'||b.r==='loss').map(b=>`${b.r}: ${b.d}`).join('\n');
 S.b=S.b.filter(z=>z.r!=='pending'||!z.auto);localStorage.setItem('xb',JSON.stringify(S.b));
-const r=await cl([{role:'user',content:`Elite analyst. ${timeNote}\nBest DraftKings parlays.\nNot content writer. Sharp friend minimizing bullshit.\n\nPROCESS: (1) Injury check ALL sports (2) Win prob + blowout 80%+=alt lines. KAT 22/22.5 lesson. Jokic 8pts lesson. (3) Teammate splits 10+ games (4) Matchup/opponent analysis (5) Exact DK alt lines (6) Path-to-win before Q4 (7) Trap detection — no made-3s, double-doubles, assist-dependent (8) Cross-sport if strong legs exist\n\nPhilosophy: Guaranteed-first. Small consistent wins. 65-70% confidence. Only as many parlays as make sense.\n\n${ls?'LESSONS FROM PAST BETS:\n'+ls+'\n':''}OUTPUT FORMAT:\n**SLATE + WIN PROBABILITIES** (every game with blowout flags)\n**CANDIDATE BREAKDOWN** (detailed analysis per candidate)\n**TIER RANKING** (Tier 1: best, Tier 2: viable, Tier 3: traps)\n**PARLAY 1 — SAFEST** (3 legs, exact props/thresholds, reasoning, what kills it)\n**PARLAY 2 — MORE PAYOUT** (3 legs, added risk honest)\n**STRONGEST STANDALONE LEG**\n\nIMPORTANT: At the very end, output a JSON block wrapped in \`\`\`json tags with this exact format for auto-logging:\n{"parlays":[{"name":"Parlay 1","legs":["Leg description 1","Leg description 2","Leg description 3"],"stake":25},{"name":"Parlay 2","legs":["Leg 1","Leg 2","Leg 3"],"stake":25}]}`}],SYS,null,true);
-o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>';
-// Auto-log parlays as pending
-try{const jm=r.match(/```json\n([\s\S]*?)```/);if(jm){const pd=JSON.parse(jm[1]);if(pd.parlays){pd.parlays.forEach(p=>{S.b.push({d:p.name+': '+p.legs.join(' + '),s:p.stake||25,r:'pending',p:0,l:'',auto:true,date:dateStr})})}localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets()}}catch(e){console.log('Auto-log parse error',e)}}
-async function checkRes(){const pending=S.b.filter(z=>z.r==='pending');if(!pending.length){alert('No pending bets to check');return}const o=document.getElementById('pro0');o.innerHTML='<div class="ld"></div> Checking final scores and updating results...';const descs=pending.map(z=>z.d).join('\n');const r=await cl([{role:'user',content:`Check the final results for these pending bets. For each bet, determine if it WON, LOST, or PUSHED based on actual final box scores and stats.\n\nPENDING BETS:\n${descs}\n\nFor each bet, output a JSON block:\n\`\`\`json\n{"results":[{"desc":"exact bet description","result":"win or loss or push","payout":68.22,"lesson":"what we learned"}]}\n\`\`\`\n\nBe accurate. Check real final stats. If a game hasn't finished yet, mark as "pending".`}],SYS,null,true);
-o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>';
-try{const jm=r.match(/```json\n([\s\S]*?)```/);if(jm){const res=JSON.parse(jm[1]);if(res.results){res.results.forEach(rr=>{const match=S.b.find(z=>z.r==='pending'&&z.d.includes(rr.desc?.substring(0,20)));if(match&&rr.result!=='pending'){match.r=rr.result;match.p=rr.payout||0;match.l=rr.lesson||''}});localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets()}}}catch(e){console.log('Results parse error',e)}}
+
+try{
+// STEP 1: Injuries & Slate
+step.textContent='Step 1/4 — Searching injuries and today\'s slate across all sports...';bar.style.width='10%';
+const s1=await cl([{role:'user',content:`${timeNote}\n\nSearch for TODAY's complete injury report and game slate. I need:\n1. Every game scheduled today across NBA, NHL, MLB, NFL, college, UFC — with approximate win probabilities or spreads\n2. ALL confirmed injuries, questionable players, and players ruled OUT\n3. Flag which absences create usage bumps for other players\n4. Flag which games are 80%+ blowout risk\n\nBe specific. Real names, real injury statuses, real games. Search the web for this information.\n\nOutput as a structured list. No analysis yet — just the raw data.`}],SYS,null,true);
+bar.style.width='25%';
+
+// STEP 2: Player Stats & Splits
+step.textContent='Step 2/4 — Researching player stats, splits, and DraftKings props...';
+const s2=await cl([{role:'user',content:`Based on this injury/slate data:\n\n${s1}\n\nNow search for the SPECIFIC stats I need to build parlays. For each promising player (ones with usage bumps from injuries, favorable matchups, or clean floors):\n\n1. Season averages for ALL stat categories (pts, ast, reb, P+A, P+R, PRA)\n2. Teammate-out splits if a key player is absent (minimum 10 game sample)\n3. Last 5-10 game performance trends\n4. Matchup-specific data — what does their opponent give up?\n5. Home/away splits if relevant\n\nAlso search for:\n6. Current DraftKings prop lines and alt lines for these players — search "DraftKings [player name] props today" or "[player name] DraftKings odds"\n7. Any same-game parlay opportunities where team winning correlates with player performance\n8. Team totals — any obvious over/under plays based on pace and defense matchups\n\nSearch the web for real, current stats. Don't guess. If you can't verify a number, say so.\n\nOutput the raw stats. No parlay picks yet.`}],SYS,null,true);
+bar.style.width='55%';
+
+// STEP 3: Verify & Build
+step.textContent='Step 3/4 — Cross-checking stats and building parlays...';
+const s3=await cl([{role:'user',content:`Here is the injury data:\n${s1}\n\nHere are the player stats and DraftKings lines:\n${s2}\n\nNow BUILD THE PARLAYS. Apply the full methodology:\n\nPROCESS:\n1. Blowout screening — 80%+ games get alt lines only or moneylines. KAT scored 22 on 22.5 line in blowout (missed by 0.5). Jokic scored 8 in blowout. Stars get benched early.\n2. Path-to-win — can each leg hit before Q4? How many things need to go right?\n3. Trap detection — overpriced obvious spots, teammate-dependent assists, volatile props, recency bias\n4. Cross-check your stats — if you cited a specific number, is it actually correct based on what you found?\n\nSCAN ALL PROP TYPES — pick whatever has the HIGHEST probability of hitting:\n- Player points, assists, rebounds, combos (P+A, P+R, PRA)\n- Alt lines on all of the above\n- Team moneylines, spreads, totals\n- Same-game parlays (team win + player prop when positively correlated)\n- Steals, blocks, made threes (only if 90%+ floor at that threshold)\n\nRULES:\n- Three legs, three independent games (unless SGP is clearly stronger)\n- NEVER double-doubles or triple-doubles\n- If the slate is bad, say so — don't force picks\n- Guaranteed-first philosophy. Boring wins are still wins.\n- Recommend stake sizing: Parlay 1 gets 60% budget (higher confidence), Parlay 2 gets 40%\n\n${ls?'LESSONS FROM PAST BETS:\n'+ls+'\n':''}${propHist?'BET HISTORY (for prop type patterns):\n'+propHist+'\n':''}\nOUTPUT FORMAT — THIS IS CRITICAL, FOLLOW EXACTLY:\n\nFirst output a JSON block (this gets parsed for the UI cards):\n\`\`\`json\n{"parlays":[{"name":"Parlay 1 — Safest","confidence":70,"stake":25,"legs":[{"prop":"SGA Over 20.5 Points","game":"OKC vs BKN","type":"points_alt","reason":"Usage bump with Jalen Williams out, 31.6 PPG, alt line survives blowout"},{"prop":"Randle Over 20.5 Points","game":"MIN vs UTA","type":"points_alt","reason":"26.4 PPG without Ant Edwards, lower threshold beats blowout risk"},{"prop":"Brown Over 24.5 Points","game":"BOS vs GSW","type":"points","reason":"28.4 PPG, Wiggins out, 24 straight 20+ games, home"}]},{"name":"Parlay 2 — More Payout","confidence":62,"stake":15,"legs":[{"prop":"Example prop","game":"Example game","type":"type","reason":"reason"},{"prop":"Example","game":"Example","type":"type","reason":"reason"},{"prop":"Example","game":"Example","type":"type","reason":"reason"}]}],"standalone":{"prop":"Best single leg","game":"Game","type":"type","reason":"Why this is the strongest"},"watchlist":["Player A (injury) — verify before tip","Player B (questionable) — monitor"]}\n\`\`\`\n\nThen output the full detailed research analysis with:\n**SLATE + WIN PROBABILITIES**\n**PROP TYPES SCANNED**\n**CANDIDATE BREAKDOWN** (8-12 candidates across all prop types)\n**TIER RANKING**\n**DETAILED REASONING** for each parlay leg\n**WHAT KILLS EACH PARLAY**`}],SYS,null,true);
+bar.style.width='90%';
+
+// STEP 4: Parse and display
+step.textContent='Step 4/4 — Formatting results...';
+bar.style.width='100%';
+
+// Parse JSON for clean cards
+let parsed=null;
+try{const jm=s3.match(/```json\n([\s\S]*?)```/);if(jm)parsed=JSON.parse(jm[1])}catch(e){console.log('Parse error',e)}
+
+// Display clean parlay cards
+if(parsed&&parsed.parlays){
+let cardHtml='';
+parsed.parlays.forEach((p,i)=>{
+cardHtml+=`<div style="background:${i===0?'var(--al)':'var(--bg3)'};border:1px solid ${i===0?'#bfdbfe':'var(--border)'};border-radius:var(--r);padding:16px;margin-bottom:12px">
+<div class="fx jb ac" style="margin-bottom:12px">
+<div><div style="font-family:Outfit;font-weight:700;font-size:15px">${x(p.name)}</div>
+<div style="font-size:11px;color:var(--text3);margin-top:2px">Confidence: ${p.confidence||'~65'}% · Recommended: $${p.stake||25}</div></div>
+<div style="background:${i===0?'var(--accent)':'var(--text2)'};color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">${i===0?'SAFEST':'MORE PAYOUT'}</div>
+</div>`;
+(p.legs||[]).forEach((leg,li)=>{
+cardHtml+=`<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px">
+<div style="background:var(--accent);color:#fff;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">${li+1}</div>
+<div style="flex:1"><div style="font-weight:700;font-size:13px">${x(leg.prop)}</div>
+<div style="font-size:11px;color:var(--text3);margin-top:2px">${x(leg.game)} · ${x(leg.type||'')}</div>
+<div style="font-size:12px;color:var(--text2);margin-top:4px">${x(leg.reason)}</div></div>
+</div>`;});
+cardHtml+=`</div>`;});
+
+// Standalone leg
+if(parsed.standalone){
+cardHtml+=`<div style="background:var(--gb);border:1px solid #a7f3d0;border-radius:var(--r);padding:14px;margin-bottom:12px">
+<div style="font-family:Outfit;font-weight:700;font-size:13px;margin-bottom:6px">🏆 STRONGEST STANDALONE LEG</div>
+<div style="font-weight:600;font-size:13px">${x(parsed.standalone.prop)}</div>
+<div style="font-size:11px;color:var(--text3);margin-top:2px">${x(parsed.standalone.game)}</div>
+<div style="font-size:12px;color:var(--text2);margin-top:4px">${x(parsed.standalone.reason)}</div>
+</div>`;}
+
+cards.innerHTML=cardHtml;cards.style.display='block';
+
+// Watchlist
+if(parsed.watchlist&&parsed.watchlist.length){
+let wHtml=`<div style="background:var(--yb);border:1px solid #fde68a;border-radius:var(--r);padding:14px">
+<div style="font-family:Outfit;font-weight:700;font-size:13px;margin-bottom:8px">⚠️ CHECK BEFORE LOCKING</div>`;
+parsed.watchlist.forEach(w=>{wHtml+=`<div style="font-size:12px;color:var(--yellow);margin-bottom:4px">• ${x(w)}</div>`});
+wHtml+=`</div>`;watch.innerHTML=wHtml;watch.style.display='block';}
+
+// Auto-log
+parsed.parlays.forEach(p=>{
+const legDescs=(p.legs||[]).map(l=>l.prop).join(' + ');
+S.b.push({d:p.name+': '+legDescs,s:p.stake||25,r:'pending',p:0,l:'',auto:true,date:dateStr,propTypes:(p.legs||[]).map(l=>l.type).join(',')});
+});
+localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets();
+}else{
+cards.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(s3)+'</div>';cards.style.display='block';
+}
+
+// Full research in collapsible
+const fullResearch=s3.replace(/```json\n[\s\S]*?```/,'').trim();
+research.innerHTML='<div style="font-size:13px;line-height:1.6">'+fm(fullResearch)+'</div>';
+details.style.display='block';
+
+}catch(e){
+cards.innerHTML='<div style="color:var(--red);padding:12px">Error: '+e.message+'</div>';cards.style.display='block';
+}
+
+prog.style.display='none';document.getElementById('parGenBtn').disabled=false;
+}
+async function checkRes(){const pending=S.b.filter(z=>z.r==='pending');if(!pending.length){alert('No pending bets to check');return}
+const cards=document.getElementById('parCards');
+const details=document.getElementById('parDetails');
+const research=document.getElementById('parResearch');
+const prog=document.getElementById('parProgress');
+const step=document.getElementById('parStep');
+const bar=document.getElementById('parBar');
+prog.style.display='block';step.textContent='Checking final scores...';bar.style.width='30%';
+const descs=pending.map(z=>z.d).join('\n');
+const r=await cl([{role:'user',content:`Check the final results for these pending bets. Search for actual final box scores and player stats.\n\nPENDING BETS:\n${descs}\n\nFor each bet leg, look up the REAL final stats. Determine if the overall parlay WON (all legs hit), LOST (any leg missed), or PUSHED.\n\nOutput a JSON block:\n\`\`\`json\n{"results":[{"desc":"first 30 chars of bet description","result":"win or loss or push","payout":68.22,"lesson":"specific lesson — what worked, what failed, prop type analysis"}]}\n\`\`\`\n\nThen after the JSON, give a brief breakdown of each leg's actual result with real final stats.`}],SYS,null,true);
+bar.style.width='100%';
+try{const jm=r.match(/```json\n([\s\S]*?)```/);if(jm){const res=JSON.parse(jm[1]);if(res.results){res.results.forEach(rr=>{const match=S.b.find(z=>z.r==='pending'&&z.d.includes(rr.desc?.substring(0,20)));if(match&&rr.result!=='pending'){match.r=rr.result;match.p=rr.payout||0;match.l=rr.lesson||''}});localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets()}}}catch(e){console.log('Results parse error',e)}
+const fullText=r.replace(/```json\n[\s\S]*?```/,'').trim();
+research.innerHTML='<div style="font-size:13px;line-height:1.6">'+fm(fullText)+'</div>';
+details.style.display='block';
+
+// Show result cards
+let resHtml='';
+S.b.filter(z=>z.r==='win'||z.r==='loss').slice(-4).reverse().forEach(b=>{
+const isW=b.r==='win';
+resHtml+=`<div style="background:${isW?'var(--gb)':'var(--rb)'};border:1px solid ${isW?'#a7f3d0':'#fecaca'};border-radius:var(--r);padding:12px;margin-bottom:8px">
+<div class="fx jb ac"><span style="font-weight:700;font-size:13px">${isW?'✅ WON':'❌ LOST'}</span><span style="font-family:JetBrains Mono;font-size:12px">${isW?'+$'+(((b.p||0)-(b.s||0)).toFixed(2)):'-$'+(b.s||0).toFixed(2)}</span></div>
+<div style="font-size:12px;color:var(--text2);margin-top:4px">${x(b.d)}</div>
+${b.l?'<div style="font-size:11px;color:var(--text3);margin-top:4px;font-style:italic">Lesson: '+x(b.l)+'</div>':''}
+</div>`;});
+if(resHtml){cards.innerHTML=resHtml;cards.style.display='block';}
+prog.style.display='none';
+}
 function lBet(){const b={d:document.getElementById('mbd0').value.trim(),s:parseFloat(document.getElementById('mbs0').value)||0,r:document.getElementById('mbr0').value,p:parseFloat(document.getElementById('mbp0').value)||0,l:document.getElementById('mbl0').value.trim()};if(!b.d)return;S.b.push(b);localStorage.setItem('xb',JSON.stringify(S.b));cM('mb0');rB();sbSyncBets()}
 function clIP(i){const p=document.getElementById('clp0');S.ci=[];p.innerHTML='';Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{S.ci.push(e.target.result);const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)})}
 async function clPr(){const n=document.getElementById('cn0').value.trim(),u=document.getElementById('cu0').value.trim(),c=document.getElementById('cc0').value.trim(),ins=document.getElementById('cins0').value.trim();if(!n&&!u&&!S.ci.length)return;const o=document.getElementById('clo0');o.style.display='block';document.getElementById('clr0').textContent='Generating...';const ct=[];S.ci.forEach(i=>{const[m,b]=i.split(',');ct.push({type:'image',source:{type:'base64',media_type:m.match(/:(.*?);/)?.[1]||'image/png',data:b}})});ct.push({type:'text',text:`Clone ONE-TO-ONE HTML.\nProject: ${n||'Clone'}\n${u?'URL: '+u:''}\n${c?'Code:\n'+c:''}\n${ins?'Instructions: '+ins:''}\nPixel perfect. Complete HTML+CSS+JS.`});const r=await cl([{role:'user',content:ct}]);document.getElementById('clr0').textContent=r||'Error.'}
