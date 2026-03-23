@@ -3,466 +3,1933 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xylix OS</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Xylix Parlay Engine V4</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fff;--bg2:#f8f9fb;--bg3:#f1f3f5;--card:#fff;--border:#e8eaed;--border2:#d1d5db;--text:#111827;--text2:#4b5563;--text3:#9ca3af;--accent:#2563eb;--accent2:#1d4ed8;--al:#eff6ff;--at:#1e40af;--green:#059669;--gb:#ecfdf5;--gt:#065f46;--red:#dc2626;--rb:#fef2f2;--rt:#991b1b;--yellow:#d97706;--yb:#fffbeb;--shadow:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 6px -1px rgba(0,0,0,.06);--r:10px;--rs:7px;--rx:5px}
-html,body{height:100%;background:var(--bg2);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:'Outfit',sans-serif;font-weight:700}
-input,textarea,select,button{font-family:inherit;font-size:inherit;color:inherit;outline:none}
-::selection{background:var(--al);color:var(--at)}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-.app{display:flex;height:100vh}
-.sb{width:220px;background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.sb-logo{padding:20px 18px 16px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border)}
-.lm{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;font-family:'Outfit'}
-.lt{font-family:'Outfit';font-weight:800;font-size:17px;letter-spacing:-.03em}
-.lg{font-size:9px;color:var(--text3);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-left:auto;background:var(--bg2);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
-.nv{flex:1;overflow-y:auto;padding:12px 8px}
-.ng{margin-bottom:20px}
-.ng-t{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:0 10px 6px}
-.ni{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--rs);cursor:pointer;transition:all .12s;color:var(--text2);font-weight:500;font-size:13px}
-.ni:hover{background:var(--bg2);color:var(--text)}
-.ni.on{background:var(--al);color:var(--at)}
-.ni svg{width:17px;height:17px;flex-shrink:0;stroke-width:1.8}
-.sb-ft{padding:10px 8px;border-top:1px solid var(--border)}
-.sb-btn{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--rs);cursor:pointer;color:var(--text3);font-weight:500;font-size:13px;width:100%;border:none;background:none;transition:all .12s}
-.sb-btn:hover{background:var(--bg2);color:var(--text)}
-.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg2)}
-.tb{height:52px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px}
-.tb-t{font-family:'Outfit';font-size:14px;font-weight:700}
-.tb-s{color:var(--text3);font-size:12px;font-weight:500}
-.ct{flex:1;overflow-y:auto;padding:24px}
-.pg{display:none;height:100%}.pg.on{display:flex;flex-direction:column;height:100%}
-.cd{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.ct-t{font-family:'Outfit';font-size:14px;font-weight:700}
-.btn{padding:7px 15px;border-radius:var(--rx);font-weight:600;font-size:13px;cursor:pointer;transition:all .12s;border:none;display:inline-flex;align-items:center;gap:5px}
-.bp{background:var(--accent);color:#fff}.bp:hover{background:var(--accent2)}
-.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}.bs:hover{background:var(--bg2)}
-.bg{background:none;color:var(--text2);padding:5px 8px}.bg:hover{background:var(--bg2)}
-.bsm{padding:4px 10px;font-size:12px}
-.bd{background:var(--rb);color:var(--rt);border:1px solid #fecaca}
-.inp{background:var(--bg);border:1px solid var(--border);border-radius:var(--rx);padding:8px 12px;color:var(--text);width:100%;transition:border .12s}
-.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
-.inp::placeholder{color:var(--text3)}
-textarea.inp{resize:vertical;min-height:72px;line-height:1.55}
-select.inp{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.lb{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px;display:block}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.fx{display:flex}.gc{gap:12px}.g4x{gap:16px}.ac{align-items:center}.jb{justify-content:space-between}
-.m3{margin-bottom:12px}.m4{margin-bottom:16px}.m5{margin-bottom:20px}.mt3{margin-top:12px}.mt4{margin-top:16px}
-.tabs{display:flex;gap:1px;background:var(--bg3);border-radius:var(--rs);padding:3px;width:fit-content}
-.tab{padding:5px 14px;border-radius:var(--rx);font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);transition:all .12s}
-.tab:hover{color:var(--text)}.tab.on{background:var(--bg);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.cw{display:flex;flex-direction:column;height:calc(100vh - 52px)}
-.cms{flex:1;overflow-y:auto;padding:20px 24px}
-.cm{max-width:680px;margin-bottom:14px}.cm.u{margin-left:auto}
-.bbl{padding:11px 15px;border-radius:var(--r);font-size:13.5px;line-height:1.6}
-.cm.u .bbl{background:var(--accent);color:#fff;border-bottom-right-radius:3px}
-.cm.a .bbl{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:3px}
-.mw{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
-.cm.u .mw{text-align:right}
-.cbar{border-top:1px solid var(--border);padding:14px 24px;background:var(--bg)}
-.cbi{display:flex;gap:8px;align-items:flex-end;max-width:740px}
-.cbi textarea{flex:1;min-height:40px;max-height:140px;resize:none;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg2);line-height:1.5}
-.cbi textarea:focus{border-color:var(--accent);background:var(--bg)}
-.ib{width:38px;height:38px;border-radius:var(--rx);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border:1px solid var(--border);background:var(--bg);color:var(--text3);transition:all .12s}
-.ib:hover{border-color:var(--accent);color:var(--accent)}
-.sb2{width:38px;height:38px;border-radius:var(--rx);background:var(--accent);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;flex-shrink:0}
-.sb2:hover{background:var(--accent2)}
-.tr{display:flex;align-items:center;gap:11px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:7px}
-.tc{width:18px;height:18px;border:2px solid var(--border2);border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
-.tc:hover{border-color:var(--accent)}
-.tc.dn{background:var(--green);border-color:var(--green)}.tc.dn::after{content:'\2713';color:#fff;font-size:10px;font-weight:700}
-.tr.dn .tl{text-decoration:line-through;color:var(--text3)}
-.tl{flex:1;font-size:13px}.tt{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:3px;background:var(--rb);color:var(--rt)}
-.tx{color:var(--text3);cursor:pointer;padding:3px;border:none;background:none;font-size:13px;border-radius:3px}.tx:hover{color:var(--red);background:var(--rb)}
-.cc{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .15s}.cc:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.cth{height:130px;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:11px;overflow:hidden}.cth img{width:100%;height:100%;object-fit:cover}
-.cbd{padding:12px}.cnm{font-family:'Outfit';font-weight:700;font-size:14px;margin-bottom:2px}.cvb{font-size:11px;color:var(--text3)}
-.pv{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);min-height:280px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;overflow:hidden}
-.pv img,.pv video{max-width:100%;max-height:380px;border-radius:var(--rs)}
-.uz{border:2px dashed var(--border);border-radius:var(--rs);padding:20px;text-align:center;cursor:pointer;color:var(--text3);transition:all .12s;min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
-.uz:hover{border-color:var(--accent);background:var(--al);color:var(--at)}
-.sc{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
-.sn{font-family:'Outfit';font-size:26px;font-weight:800;letter-spacing:-.02em}.sl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-.sn.g{color:var(--green)}.sn.r{color:var(--red)}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.2);backdrop-filter:blur(3px);z-index:100;display:none;align-items:center;justify-content:center}
-.mo.sh{display:flex}
-.mb{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);width:480px;max-width:90vw;max-height:80vh;overflow-y:auto;padding:22px;box-shadow:var(--shadow-md)}
-.mb h3{font-family:'Outfit';font-size:16px;margin-bottom:14px}
-.cb{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:14px;white-space:pre-wrap;overflow-y:auto;max-height:420px}
-.kr{display:flex;gap:10px;align-items:center;margin-bottom:9px}.kl{width:100px;font-size:12px;font-weight:600;color:var(--text3);flex-shrink:0}
-.kd{width:7px;height:7px;border-radius:50%;flex-shrink:0}.kd.y{background:var(--green)}.kd.n{background:var(--text3)}
-.em{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;color:var(--text3);text-align:center}.em p{font-size:12px;max-width:280px;line-height:1.6;margin-top:8px}
-.ld{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .5s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.fu{animation:fu .25s ease-out}
+  :root {
+    --blue: #2563eb;
+    --blue-light: #eff6ff;
+    --blue-mid: #bfdbfe;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --yellow: #d97706;
+    --yellow-light: #fffbeb;
+    --purple: #7c3aed;
+    --purple-light: #f5f3ff;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --font-main: 'Outfit', sans-serif;
+    --font-body: 'Manrope', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ── HEADER ── */
+  .engine-header {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 22px 28px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .header-left {}
+  .engine-title {
+    font-family: var(--font-main);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.4px;
+    white-space: nowrap;
+  }
+  .engine-title span { color: var(--blue); }
+  .engine-meta {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 3px;
+    font-family: var(--font-mono);
+  }
+  .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .version-badge {
+    background: var(--blue);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: var(--font-main);
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .rules-badge {
+    background: var(--green-light);
+    color: var(--green);
+    border: 1px solid #bbf7d0;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-family: var(--font-main);
+    white-space: nowrap;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .stat-num {
+    font-family: var(--font-main);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num.green { color: var(--green); }
+  .stat-num.red { color: var(--red); }
+  .stat-num.blue { color: var(--blue); }
+  .stat-label {
+    font-size: 10px;
+    color: var(--gray-500);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── CONTROLS ── */
+  .controls-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 13px 20px;
+    border-radius: 10px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--blue); color: white; flex: 1; }
+  .btn-primary:hover:not(:disabled) { background: #1d4ed8; }
+  .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-secondary { background: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
+  .btn-secondary:hover:not(:disabled) { background: var(--gray-50); border-color: var(--gray-300); }
+  .btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-green { background: var(--green); color: white; }
+  .btn-green:hover:not(:disabled) { background: #15803d; }
+  .btn-danger { background: var(--red-light); color: var(--red); border: 1px solid #fecaca; }
+  .btn-danger:hover:not(:disabled) { background: #fee2e2; }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    display: none;
+    box-shadow: var(--shadow);
+  }
+  .progress-label {
+    font-family: var(--font-main);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .step-pill {
+    padding: 7px 4px;
+    border-radius: 7px;
+    font-family: var(--font-main);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    background: var(--gray-100);
+    color: var(--gray-400);
+    transition: all 0.3s;
+    line-height: 1.3;
+  }
+  .step-pill.active { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
+  .step-pill.done { background: var(--green-light); color: var(--green); border: 1px solid #bbf7d0; }
+  .progress-track {
+    height: 4px;
+    background: var(--gray-100);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), #60a5fa);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+
+  /* ── OUTPUT ── */
+  #outputArea { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ── PARLAY CARD ── */
+  .parlay-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .card-header {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .card-title {
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-800);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .card-body { padding: 18px 22px; }
+
+  /* ── LEG ITEMS ── */
+  .leg-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 13px 15px;
+    background: var(--gray-50);
+    border-radius: 9px;
+    margin-bottom: 9px;
+    border: 1px solid var(--gray-100);
+    gap: 12px;
+  }
+  .leg-item:last-child { margin-bottom: 0; }
+  .leg-left { flex: 1; min-width: 0; }
+  .leg-num {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .leg-player {
+    font-family: var(--font-main);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .leg-prop {
+    font-family: var(--font-main);
+    font-size: 13px;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .leg-game {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-400);
+  }
+  .leg-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .leg-tag {
+    font-family: var(--font-main);
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--blue-light);
+    color: var(--blue);
+    letter-spacing: 0.3px;
+  }
+  .leg-right { text-align: right; flex-shrink: 0; }
+  .leg-conf {
+    font-family: var(--font-main);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--green);
+    margin-bottom: 3px;
+  }
+  .leg-conf.med { color: var(--yellow); }
+  .leg-conf.low { color: var(--red); }
+  .leg-odds {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-500);
+  }
+
+  /* ── PAYOUT ── */
+  .payout-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--blue-light);
+    border: 1px solid var(--blue-mid);
+    border-radius: 9px;
+    padding: 13px 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .payout-label { font-family: var(--font-main); font-size: 12px; font-weight: 600; color: var(--blue); }
+  .payout-amount { font-family: var(--font-main); font-size: 22px; font-weight: 800; color: var(--blue); }
+
+  /* ── NO PARLAY ── */
+  .no-parlay-card {
+    background: var(--red-light);
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    padding: 28px 28px;
+    text-align: center;
+  }
+  .no-parlay-card h3 {
+    font-family: var(--font-main);
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .no-parlay-card p { font-size: 13px; color: #7f1d1d; line-height: 1.7; text-align: left; }
+
+  /* ── STANDALONE LEG ── */
+  .standalone-card {
+    background: white;
+    border: 2px solid #bbf7d0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .standalone-header {
+    background: var(--green-light);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .standalone-header span {
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  /* ── COLLAPSIBLE RESEARCH ── */
+  .research-section {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .research-toggle {
+    width: 100%;
+    padding: 14px 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-align: left;
+    transition: background 0.1s;
+  }
+  .research-toggle:hover { background: var(--gray-50); }
+  .research-body {
+    border-top: 1px solid var(--gray-100);
+    padding: 18px 22px;
+    display: none;
+  }
+  .research-body.open { display: block; }
+  .research-subsection-title {
+    font-family: var(--font-main);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 14px 0 6px;
+  }
+  .research-subsection-title:first-child { margin-top: 0; }
+  .research-content {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-600);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    background: var(--gray-50);
+    border-radius: 6px;
+    padding: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  /* ── WATCHLIST ── */
+  .watch-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+  .watch-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .watch-icon { font-size: 14px; flex-shrink: 0; padding-top: 1px; }
+
+  /* ── ELIMINATED ── */
+  .elim-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--gray-50);
+    font-size: 12px;
+    color: var(--gray-600);
+    flex-wrap: wrap;
+  }
+  .elim-item:last-child { border-bottom: none; }
+  .elim-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    background: var(--red-light);
+    color: var(--red);
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+
+  /* ── RESULTS SECTION ── */
+  .results-section {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 14px;
+    display: none;
+    box-shadow: var(--shadow);
+  }
+  .results-section.show { display: block; }
+
+  /* ── TRACKING ── */
+  .tracking-wrap {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 16px;
+    box-shadow: var(--shadow);
+  }
+  .tracking-header {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tracking-header h3 {
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-800);
+  }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .tracking-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 560px;
+  }
+  .tracking-table th {
+    padding: 9px 16px;
+    text-align: left;
+    font-family: var(--font-main);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-100);
+    white-space: nowrap;
+  }
+  .tracking-table td {
+    padding: 11px 16px;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-50);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .tracking-table tr:last-child td { border-bottom: none; }
+  .tracking-table tr:hover td { background: var(--gray-50); }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: var(--font-main);
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .status-pending { background: var(--yellow-light); color: var(--yellow); }
+  .status-win { background: var(--green-light); color: var(--green); }
+  .status-loss { background: var(--red-light); color: var(--red); }
+  .status-partial { background: var(--blue-light); color: var(--blue); }
+
+  /* ── CLV TRACKER ── */
+  .clv-widget {
+    background: var(--purple-light);
+    border: 1px solid #ddd6fe;
+    border-radius: 9px;
+    padding: 12px 15px;
+    margin-top: 12px;
+  }
+  .clv-title {
+    font-family: var(--font-main);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .clv-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .clv-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 120px;
+  }
+  .clv-field label {
+    font-size: 10px;
+    color: var(--purple);
+    font-weight: 600;
+    font-family: var(--font-main);
+  }
+  .clv-input {
+    padding: 6px 10px;
+    border: 1px solid #ddd6fe;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: white;
+    color: var(--gray-800);
+    width: 100%;
+  }
+  .clv-input:focus { outline: none; border-color: var(--purple); }
+  .clv-result {
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 6px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    display: none;
+  }
+  .clv-beat { background: var(--green-light); color: var(--green); }
+  .clv-lost { background: var(--red-light); color: var(--red); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 44px 20px;
+    color: var(--gray-400);
+  }
+  .empty-icon { font-size: 38px; margin-bottom: 10px; }
+  .empty-title { font-family: var(--font-main); font-size: 14px; font-weight: 600; color: var(--gray-500); margin-bottom: 5px; }
+  .empty-sub { font-size: 12px; }
+
+  /* ── METHODOLOGY PILL ── */
+  .method-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--gray-100);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-family: var(--font-main);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-600);
+    margin: 2px;
+  }
+  .method-pill.active { background: var(--blue-light); color: var(--blue); }
+
+  /* ── ANALYSIS ACCORDION ── */
+  .analysis-leg {
+    border: 1px solid var(--gray-100);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .analysis-leg:last-child { margin-bottom: 0; }
+  .analysis-leg-header {
+    padding: 10px 14px;
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-700);
+    cursor: pointer;
+    background: var(--gray-50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .analysis-leg-header:hover { background: var(--gray-100); }
+  .analysis-leg-body {
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.7;
+    display: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: var(--font-mono);
+  }
+  .analysis-leg-body.open { display: block; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    body { padding: 12px 10px 32px; }
+    .engine-header { padding: 16px 16px; }
+    .engine-title { font-size: 17px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .steps-row { grid-template-columns: repeat(3, 1fr); }
+    .controls-row { flex-wrap: wrap; }
+    .btn-primary { min-width: 100%; }
+    .card-body { padding: 14px 14px; }
+    .card-header { padding: 13px 14px; }
+    .payout-amount { font-size: 18px; }
+    .tracking-header { padding: 13px 14px; }
+  }
 </style>
 </head>
 <body>
-<div class="app">
-<aside class="sb">
-<div class="sb-logo"><div class="lm">X</div><span class="lt">Xylix</span><span class="lg">OS</span></div>
-<nav class="nv">
-<div class="ng"><div class="ng-t">Core</div>
-<div class="ni on" data-p="chat" onclick="go('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>AI Chat</div>
-<div class="ni" data-p="daily" onclick="go('daily')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Daily OS</div>
-</div>
-<div class="ng"><div class="ng-t">Create</div>
-<div class="ni" data-p="models" onclick="go('models')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Model Studio</div>
-<div class="ni" data-p="imagegen" onclick="go('imagegen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image Gen</div>
-<div class="ni" data-p="videogen" onclick="go('videogen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video Gen</div>
-</div>
-<div class="ng"><div class="ng-t">Business</div>
-<div class="ni" data-p="ads" onclick="go('ads')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Ad Creative</div>
-<div class="ni" data-p="dropship" onclick="go('dropship')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Drop Shipping</div>
-<div class="ni" data-p="betting" onclick="go('betting')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Betting</div>
-</div>
-<div class="ng"><div class="ng-t">Build</div>
-<div class="ni" data-p="clone" onclick="go('clone')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Clone Projects</div>
-<div class="ni" data-p="codelab" onclick="go('codelab')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Code Lab</div>
-</div>
-</nav>
-<div class="sb-ft"><button class="sb-btn" onclick="go('settings')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</button></div>
-</aside>
-<div class="mn">
-<div class="tb"><span class="tb-t" id="pt">AI Chat</span><span style="color:var(--border2);margin:0 4px">/</span><span class="tb-s" id="ps">Claude Opus · Prompt Engineering</span></div>
+<div class="wrap">
 
-<div class="pg on" id="p-chat"><div class="cw"><div class="cms" id="cm0"><div class="cm a fu"><div class="mw">Xylix OS · Claude</div><div class="bbl">What's good?</div></div></div><div class="cbar"><div class="cbi"><div class="ib" onclick="document.getElementById('cf0').click()" title="Upload images"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="cf0" accept="image/*" multiple style="display:none" onchange="cImgH(this)"></div><textarea id="ci0" placeholder="Message Claude... (Ctrl+Enter)" rows="1" onkeydown="if(event.ctrlKey&&event.key==='Enter'){sChat();event.preventDefault()}" oninput="ar(this)"></textarea><button class="sb2" id="stopBtn" onclick="stopChat()" style="display:none;background:var(--red)" title="Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button><button class="sb2" id="sendBtn" onclick="sChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div></div></div>
+  <!-- HEADER -->
+  <div class="engine-header">
+    <div class="header-left">
+      <div class="engine-title">🎯 Xylix <span>Parlay</span> Engine</div>
+      <div class="engine-meta" id="slateLabel">Initializing...</div>
+    </div>
+    <div class="header-right">
+      <span class="rules-badge">16 RULES STRICT</span>
+      <span class="version-badge">V4 FINAL</span>
+    </div>
+  </div>
 
-<div class="pg" id="p-daily"><div class="ct"><div class="fx jb ac m5"><div><h1 style="font-size:22px;letter-spacing:-.02em" id="dd"></h1><p style="color:var(--text3);font-size:12px;margin-top:3px" id="dc"></p></div></div><div class="fx gc m5"><input class="inp" id="ti0" placeholder="Add a task..." style="flex:1" onkeydown="if(event.key==='Enter')aT()"><button class="btn bp" onclick="aT()">Add</button></div><div id="tl0"></div></div></div>
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num green" id="statWins">0</div>
+      <div class="stat-label">Wins</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num red" id="statLosses">0</div>
+      <div class="stat-label">Losses</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num blue" id="statRate">—</div>
+      <div class="stat-label">Hit Rate</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num green" id="statProfit">$0</div>
+      <div class="stat-label">Net Profit</div>
+    </div>
+  </div>
 
-<div class="pg" id="p-models"><div class="ct"><div class="fx jb ac m5"><div><h1 style="font-size:18px">Characters</h1><p style="color:var(--text3);font-size:12px;margin-top:2px">Upload unlimited reference images per character. More refs = perfect 1:1 consistency that never drifts.</p></div><button class="btn bp" onclick="oM('mc0')">+ New Character</button></div><div class="g3 m5" id="cg0"></div><div class="cd"><div class="ch"><span class="ct-t">Generate Content Plan</span></div><div class="g2 gc"><div><label class="lb">Character</label><select class="inp" id="gc0"><option value="">Select...</option></select></div><div><label class="lb">Platform</label><select class="inp" id="gp0"><option>Instagram Post</option><option>Instagram Reel</option><option>TikTok</option></select></div></div><div class="mt3"><label class="lb">Scene</label><input class="inp" id="gs0" placeholder="e.g. Coffee shop, golden hour beach..."></div><button class="btn bp mt3" onclick="gPlan()">Generate</button><div id="po0" class="mt3" style="display:none"></div></div></div></div>
+  <!-- CONTROLS -->
+  <div class="controls-row">
+    <button class="btn btn-primary" id="generateBtn" onclick="generateParlay()">
+      🔍 Generate Today's Parlay
+    </button>
+    <button class="btn btn-secondary" id="resultsBtn" onclick="toggleResults()" disabled>
+      📊 Results
+    </button>
+    <button class="btn btn-danger" onclick="confirmClear()" title="Clear log">🗑</button>
+  </div>
 
-<div class="pg" id="p-imagegen"><div class="ct"><div class="g2 g4x"><div class="cd"><div class="ch"><span class="ct-t">Generate Image</span></div><label class="lb">Model</label><select class="inp m3" id="im0"><option value="fal-ai/flux-pro/v1.1-ultra">Flux 2 Pro Ultra</option><option value="fal-ai/nano-banana-pro">Nano Banana Pro</option><option value="fal-ai/ideogram/v3">Ideogram V3</option><option value="fal-ai/seedream-3">Seedream 3</option></select><label class="lb">Style Preset</label><select class="inp m3" id="is0"><option value="">None</option><option value="biblical">Biblical Epic</option><option value="instagram">Instagram Lifestyle</option><option value="product">Product Photography</option><option value="tiktok">TikTok UGC</option></select><label class="lb">Character</label><select class="inp m3" id="ic0"><option value="">None</option></select><label class="lb">Reference Images (up to 6 — for poses, face swaps, style matching)</label><div class="uz m3" onclick="document.getElementById('iref0').click()" style="min-height:60px;padding:12px"><span style="font-size:11px">Upload reference images</span><input type="file" id="iref0" accept="image/*" multiple style="display:none" onchange="imgRefPv(this)"></div><div id="irp0" class="fx gc m3" style="flex-wrap:wrap"></div><label class="lb">Prompt</label><textarea class="inp m3" id="ip0" rows="4" placeholder="Describe your image..."></textarea><label class="lb">Aspect Ratio</label><select class="inp m3" id="ir0"><option value="9:16">9:16 Vertical</option><option value="1:1">1:1 Square</option><option value="4:5">4:5 Portrait</option><option value="16:9">16:9 Landscape</option></select><div class="fx gc"><button class="btn bp" onclick="gImg()" style="flex:1">Generate</button><button class="btn bs" onclick="oP('ip0')">Optimize</button></div></div><div><div class="pv" id="ipv0">Generated image appears here</div></div></div></div></div>
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">Running Full Methodology</div>
+    <div class="steps-row">
+      <div class="step-pill" id="sp1">📅 Schedule</div>
+      <div class="step-pill" id="sp2">🏥 Injuries</div>
+      <div class="step-pill" id="sp3">📊 Stats</div>
+      <div class="step-pill" id="sp4">🔬 Context</div>
+      <div class="step-pill" id="sp5">🎯 Build</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">Starting research...</div>
+  </div>
 
-<div class="pg" id="p-videogen"><div class="ct"><div class="tabs m5" id="vt0"><div class="tab on" onclick="vtab(this,'tk')">TikTok / Reels</div><div class="tab" onclick="vtab(this,'yt')">YouTube Shorts</div><div class="tab" onclick="vtab(this,'dc')">Documentary</div></div>
-<div id="vt-tk"><div class="g2 g4x"><div class="cd"><div class="ch"><span class="ct-t">Kling Motion Control</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Character image + motion reference video → Kling masks movement onto character.</p><label class="lb">Model</label><select class="inp m3"><option>Kling 3.0 Motion Control</option><option>Kling 2.1 Master</option></select><div class="g2 gc m3"><div><label class="lb">Character Image</label><div class="uz" id="tkid0" onclick="document.getElementById('tkif0').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style="font-size:11px">Upload image</span><input type="file" id="tkif0" accept="image/*" style="display:none" onchange="tkIP(this)"></div></div><div><label class="lb">Motion Reference</label><div class="uz" id="tkvd0" onclick="document.getElementById('tkvf0').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span style="font-size:11px">Upload video</span><input type="file" id="tkvf0" accept="video/*" style="display:none" onchange="tkVP(this)"></div></div></div><label class="lb">Motion Guidance (Optional — helps Kling copy the motion accurately)</label><textarea class="inp m3" id="tkp0" rows="2" placeholder="e.g. Walking naturally, turning head to camera, dancing..."></textarea><button class="btn bp" onclick="gTkV()" style="width:100%">Generate Motion Video</button></div><div><div class="pv" id="tkpv0">Generated video appears here</div></div></div></div>
-<div id="vt-yt" style="display:none"><div class="cd"><div class="ch"><span class="ct-t">YouTube Shorts Pipeline</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Topic → scene breakdown → epic images → animate with Kling → narration (ElevenLabs) → animated subtitles → English + Spanish.</p><label class="lb">Topic or Script</label><textarea class="inp m3" id="yts0" rows="4" placeholder="e.g. '6 most powerful angels' or paste script..."></textarea><div class="g2 gc m3"><div><label class="lb">Language</label><select class="inp" id="ytl0"><option value="both">English + Spanish</option><option value="en">English</option><option value="es">Spanish</option></select></div><div><label class="lb">Art Style</label><select class="inp" id="yta0"><option value="biblical">Biblical Epic</option><option value="anime">Anime</option><option value="realistic">Photorealistic</option><option value="painterly">Dark Painterly</option></select></div></div><label class="lb">Subscribe CTA</label><input class="inp m3" id="ytc0" value="Comment AMEN and subscribe if you are saved by Jesus ✝"><button class="btn bp" onclick="gYTS()" style="width:100%">Generate Full Short</button><div id="yto0" class="mt3" style="display:none"></div></div></div>
-<div id="vt-dc" style="display:none"><div class="cd"><div class="em" style="padding:40px"><p style="font-size:13px;color:var(--text3);max-width:340px">Documentary pipeline ready. Send reference YouTube videos of the style you want. English only, 8-12 min.</p><textarea class="inp mt3" rows="3" placeholder="Paste reference YouTube links..." style="max-width:380px"></textarea></div></div></div>
-</div></div>
+  <!-- OUTPUT -->
+  <div id="outputArea">
+    <div class="parlay-card">
+      <div class="empty-state">
+        <div class="empty-icon">🎯</div>
+        <div class="empty-title">Parlay Engine V4 Ready</div>
+        <div class="empty-sub">16-step methodology · All 20+ flaws addressed · Zero exceptions</div>
+      </div>
+    </div>
+  </div>
 
-<div class="pg" id="p-ads"><div class="ct"><div class="cd m4"><div class="ch"><span class="ct-t">Ad Creative Engine</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">FB Ad Library + Google Trends + competitor research → 10/10 ad copy.</p><div class="g2 gc m3"><div><label class="lb">Product</label><input class="inp" id="ap0" placeholder="e.g. Magnesium Complex"></div><div><label class="lb">Platform</label><select class="inp" id="apl0"><option>Facebook</option><option>TikTok</option><option>Instagram</option><option>YouTube</option></select></div></div><div class="m3"><label class="lb">Audience</label><input class="inp" id="aa0" placeholder="e.g. Health-conscious men 25-45..."></div><button class="btn bp" onclick="gAd()">Research &amp; Generate</button></div><div id="aro0"></div></div></div>
+  <!-- RESULTS CHECKER -->
+  <div class="results-section" id="resultsSection"></div>
 
-<div class="pg" id="p-dropship"><div class="ct"><div class="tabs m5" id="dt0"><div class="tab on" onclick="dtab(this,'find')">Find Products</div><div class="tab" onclick="dtab(this,'val')">Validate</div><div class="tab" onclick="dtab(this,'store')">Build Store</div></div>
-<div id="dt-find" class="cd"><div class="ch"><span class="ct-t">Product Discovery</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Every product 10/10 or it doesn't show.</p><div class="g2 gc m3"><div><label class="lb">Niche</label><input class="inp" id="dn0" placeholder="Leave blank for all"></div><div><label class="lb">Budget</label><select class="inp" id="db0"><option>$5-15</option><option selected>$15-35</option><option>$35-75</option><option>Any</option></select></div></div><button class="btn bp" onclick="fProd()">Find Products</button><div id="dpo0" class="mt3"></div></div>
-<div id="dt-val" style="display:none" class="cd"><div class="ch"><span class="ct-t">Validate</span></div><label class="lb">Product</label><input class="inp m3" id="vp0" placeholder="AliExpress URL or name"><button class="btn bp" onclick="vProd()">Validate</button><div id="vpo0" class="mt3"></div></div>
-<div id="dt-store" style="display:none" class="cd"><div class="ch"><span class="ct-t">Store Builder</span></div><label class="lb">Product</label><input class="inp m3" id="sp0"><label class="lb">Description</label><textarea class="inp m3" id="sd0" rows="2"></textarea><label class="lb">Price</label><input class="inp m3" id="spr0" placeholder="$39.99"><button class="btn bp" onclick="bStore()">Generate</button><div id="sto0" class="mt3"></div></div>
-</div></div>
+  <!-- TRACKING LOG -->
+  <div class="tracking-wrap">
+    <div class="tracking-header">
+      <h3>📋 Parlay History</h3>
+      <span style="font-size:11px;color:var(--gray-400);font-family:var(--font-mono);">auto-saved locally</span>
+    </div>
+    <div class="table-scroll">
+      <table class="tracking-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Legs</th>
+            <th>Stake</th>
+            <th>Est. Payout</th>
+            <th>Status</th>
+            <th>P&L</th>
+            <th>Miss Reason</th>
+          </tr>
+        </thead>
+        <tbody id="trackingBody">
+          <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--gray-400);font-size:12px;">No parlays logged yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<div class="pg" id="p-betting"><div class="ct">
-<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px" class="m5">
-<div class="sc"><div class="sn g" id="bw0">0</div><div class="sl">Wins</div></div>
-<div class="sc"><div class="sn r" id="bl0">0</div><div class="sl">Losses</div></div>
-<div class="sc"><div class="sn" id="bwr0">0%</div><div class="sl">Win Rate</div></div>
-<div class="sc"><div class="sn" id="bpnl0">$0</div><div class="sl">P&amp;L</div></div>
-<div class="sc"><div class="sn" id="bstr0">—</div><div class="sl">Streak</div></div>
-</div>
-<div class="cd m4"><div class="ch"><span class="ct-t">AI Parlay Engine</span><div class="fx gc"><button class="btn bp bsm" id="parGenBtn" onclick="gPar()">Generate Today's Parlays</button><button class="btn bs bsm" onclick="checkRes()">Check Results</button></div></div>
-<p style="color:var(--text3);font-size:12px;margin-bottom:14px">Multi-step research: injuries → player stats → DraftKings lines → build parlays. All prop types. Auto-logs as pending.</p>
-<div id="parProgress" style="display:none" class="m4"><div style="background:var(--bg3);border-radius:var(--rx);padding:12px">
-<div style="font-size:12px;font-weight:600;margin-bottom:8px">Research in progress...</div>
-<div id="parStep" style="font-size:11px;color:var(--text3)">Starting...</div>
-<div style="background:var(--border);height:4px;border-radius:2px;margin-top:8px;overflow:hidden"><div id="parBar" style="background:var(--accent);height:100%;width:0%;border-radius:2px;transition:width .3s"></div></div>
-</div></div>
-<div id="parCards" style="display:none" class="m4"></div>
-<div id="parWatch" style="display:none" class="m4"></div>
-<details id="parDetails" style="display:none" class="m4"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);padding:8px 0">View Full Research Analysis</summary><div id="parResearch" style="padding-top:8px"></div></details>
-</div>
-<div class="cd"><div class="ch"><span class="ct-t">Bet History</span><button class="btn bs bsm" onclick="oM('mb0')">+ Log Bet</button></div><div id="bh0"></div></div>
-</div></div>
-
-<div class="pg" id="p-clone"><div class="ct"><div class="cd m4"><div class="ch"><span class="ct-t">Clone Projects</span></div><p style="color:var(--text3);font-size:12px;margin-bottom:14px">Upload references (unlimited), paste URL or inspect code. One-to-one HTML.</p><label class="lb">Project</label><input class="inp m3" id="cn0" placeholder="e.g. Bashapp, Larpp"><label class="lb">URL</label><input class="inp m3" id="cu0" placeholder="https://cash.app"><label class="lb">Images</label><div class="uz m3" onclick="document.getElementById('clf0').click()"><span style="font-size:11px">Upload screenshots (unlimited)</span><input type="file" id="clf0" accept="image/*" multiple style="display:none" onchange="clIP(this)"></div><div id="clp0" class="fx gc m3" style="flex-wrap:wrap"></div><label class="lb">Inspect Code</label><textarea class="inp m3" id="cc0" rows="3" placeholder="Paste HTML/CSS..."></textarea><label class="lb">Instructions</label><textarea class="inp m3" id="cins0" rows="2"></textarea><button class="btn bp" onclick="clPr()">Generate HTML</button></div><div id="clo0" style="display:none" class="cd"><div class="ch"><span class="ct-t">Output</span><button class="btn bs bsm" onclick="navigator.clipboard.writeText(document.getElementById('clr0').textContent)">Copy</button></div><div class="cb" id="clr0"></div></div></div></div>
-
-<div class="pg" id="p-codelab"><div class="cw"><div class="cms" id="cm1"><div class="cm a fu"><div class="mw">Code Lab · Claude</div><div class="bbl">Uncapped session. Paste HTML, describe features. Ctrl+Enter.</div></div></div><div class="cbar"><div class="cbi"><div class="ib" onclick="document.getElementById('cof0').click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><input type="file" id="cof0" style="display:none" onchange="coFH(this)"></div><textarea id="coi0" placeholder="Code... (Ctrl+Enter)" rows="1" onkeydown="if(event.ctrlKey&&event.key==='Enter'){sCode();event.preventDefault()}" oninput="ar(this)"></textarea><button class="sb2" onclick="sCode()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div></div></div>
-
-<div class="pg" id="p-settings"><div class="ct"><h1 style="font-size:18px;margin-bottom:3px">Settings</h1><p style="color:var(--text3);font-size:12px;margin-bottom:20px">Keys stored locally. Never sent except to respective service.</p><div class="cd m4"><div class="ct-t m4">API Keys</div><div class="kr"><span class="kl">Anthropic</span><input class="inp" id="ka0" type="password" placeholder="sk-ant-..." onchange="sK()"><div class="kd" id="sa0"></div></div><div class="kr"><span class="kl">fal.ai</span><input class="inp" id="kf0" type="password" placeholder="fal key..." onchange="sK()"><div class="kd" id="sf0"></div></div><div class="kr"><span class="kl">ElevenLabs</span><input class="inp" id="ke0" type="password" placeholder="..." onchange="sK()"><div class="kd" id="se0"></div></div></div><div class="cd m4"><div class="ct-t m4">AI Model</div><div class="kr"><span class="kl">Default</span><select class="inp" id="km0" onchange="sK()"><option value="claude-opus-4-20250514">Claude Opus 4</option><option value="claude-sonnet-4-20250514">Claude Sonnet 4</option></select></div></div><button class="btn bd" onclick="clrAll()">Clear All Data</button></div></div>
-
-</div></div>
-
-<div class="mo" id="mc0"><div class="mb"><h3>New Character</h3><label class="lb">Name</label><input class="inp m3" id="mcn0" placeholder="e.g. Jewish Guy, Sofia"><label class="lb">Vibe / Personality</label><input class="inp m3" id="mcv0" placeholder="Confident, streetwear, NYC energy"><label class="lb">Style Notes (the more detail, the more consistent)</label><textarea class="inp m3" id="mcs0" rows="2" placeholder="Hair color, skin tone, facial features, fashion style, signature look..."></textarea><label class="lb">Reference Images (upload as many as possible — more refs = perfect 1:1 consistency, never drifts)</label><div class="uz m3" onclick="document.getElementById('mci0').click()"><span style="font-size:11px">Upload unlimited reference images</span><input type="file" id="mci0" accept="image/*" multiple style="display:none" onchange="chIP(this)"></div><div id="mcip0" class="fx gc m3" style="flex-wrap:wrap"></div><div class="fx jb"><button class="btn bg" onclick="cM('mc0')">Cancel</button><button class="btn bp" onclick="svCh()">Save Character</button></div></div></div>
-
-<div class="mo" id="mb0"><div class="mb"><h3>Log Bet</h3><label class="lb">Description</label><input class="inp m3" id="mbd0"><label class="lb">Stake</label><input class="inp m3" id="mbs0" type="number"><label class="lb">Result</label><select class="inp m3" id="mbr0"><option value="pending">Pending</option><option value="win">Win</option><option value="loss">Loss</option><option value="push">Push</option></select><label class="lb">Payout</label><input class="inp m3" id="mbp0" type="number"><label class="lb">Lessons</label><textarea class="inp m3" id="mbl0" rows="2"></textarea><div class="fx jb"><button class="btn bg" onclick="cM('mb0')">Cancel</button><button class="btn bp" onclick="lBet()">Save</button></div></div></div>
+</div><!-- /wrap -->
 
 <script>
-const SYS=`You are the AI engine inside Xylix OS for Garang. Xylix Labs (magnesium complex), Beauty, Audio, Core. Be indefatigable. 10/10. No shortcuts. Handle: research, ad copy, code, dropshipping, prompts, betting. When writing HTML/code, wrap complete HTML files in \`\`\`html code blocks so they render as previews. You can build full websites, components, and apps just like Claude does. For betting: PROVEN METHOD — all sports, injury splits 10+ games, blowout screening 80%+=alt lines, trap detection, no made-3s/double-doubles, path-to-win before Q4, 3 independent games, cross-sport OK, guaranteed-first 65-70%. For dropshipping: FIND 10/10 products. For clones: pixel-perfect HTML. BRANDS: Xylix Labs, Beauty, Audio, Core. PROJECTS: Larpp.io, Bashapp, Shopify clones. CONTENT: AI characters (Jewish Guy, AI girls) TikTok+Instagram — PERFECT 1:1 consistency, never drift. YOUTUBE: @RedeemedStoriesDaily, Bible shorts English+Spanish (animated video clips, not static images), documentary English only.`;
-let S={t:JSON.parse(localStorage.getItem('xt')||'[]'),c:JSON.parse(localStorage.getItem('xc')||'[]'),b:JSON.parse(localStorage.getItem('xb')||'[]'),ch:[],co:[],ci:[]};
-const TT={chat:['AI Chat','Claude Opus · Prompt Engineering'],daily:['Daily OS','High Priority · Get It Done'],models:['Model Studio','Characters · Consistency'],imagegen:['Image Gen','Flux 2 Pro · Nano Banana · Ideogram'],videogen:['Video Gen','Kling Motion · YouTube Shorts'],ads:['Ad Creative','Indefatigable Research'],dropship:['Drop Shipping','Find · Validate · Build'],betting:['Betting','AI Parlay Engine'],clone:['Clone Projects','Pixel-Perfect HTML'],codelab:['Code Lab','Uncapped Claude'],settings:['Settings','API Keys']};
-function go(p){document.querySelectorAll('.pg').forEach(e=>e.classList.remove('on'));document.querySelectorAll('.ni').forEach(e=>e.classList.remove('on'));document.getElementById('p-'+p)?.classList.add('on');document.querySelector(`[data-p="${p}"]`)?.classList.add('on');document.getElementById('pt').textContent=TT[p]?.[0]||'';document.getElementById('ps').textContent=TT[p]?.[1]||''}
-function gk(n){return localStorage.getItem('xk_'+n)||''}
-function x(s){return s?.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')||''}
-function fm(t){if(!t)return'';return t.replace(/```(\w*)\n([\s\S]*?)```/g,'<pre class="cb">$2</pre>').replace(/`([^`]+)`/g,'<code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:JetBrains Mono;font-size:12px">$1</code>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}
-function ar(e){e.style.height='auto';e.style.height=Math.min(e.scrollHeight,140)+'px'}
-function oM(id){document.getElementById(id).classList.add('sh')}
-function cM(id){document.getElementById(id).classList.remove('sh')}
-document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('sh')})});
-async function cl(msgs,sys=SYS,signal=null,webSearch=false,modelOverride=null){const k=gk('a');if(!k){alert('Add Anthropic key in Settings');go('settings');return null}const mdl=modelOverride||localStorage.getItem('xk_m')||'claude-opus-4-20250514';try{
-// Try server route first (supports web search for live data)
-try{const opts={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs,system:sys,apiKey:k,useWebSearch:webSearch,model:mdl})};if(signal)opts.signal=signal;const r=await fetch('/api/claude',opts);const d=await r.json();if(d.error)throw new Error(d.error);return d.text||''}catch(se){
-// Fallback: direct API (works as standalone HTML, no web search)
-const opts={method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mdl,max_tokens:4096,system:sys,messages:msgs})};if(signal)opts.signal=signal;const r=await fetch('https://api.anthropic.com/v1/messages',opts);const d=await r.json();if(d.error)throw new Error(d.error.message);return d.content?.map(c=>c.text).join('')||''}}catch(e){if(e.name==='AbortError')return'[Stopped]';return'Error: '+e.message}}
-async function fl(model,input){const k=gk('f');if(!k){alert('Add fal.ai key in Settings');go('settings');return null}try{const r=await fetch('https://queue.fal.run/'+model,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Key '+k},body:JSON.stringify(input)});return await r.json()}catch(e){return null}}
-let cImgs=[];function cImgH(i){cImgs=[];Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{cImgs.push(e.target.result)};r.readAsDataURL(f)})}
-let chatCtrl=null;
-function stopChat(){if(chatCtrl){chatCtrl.abort();chatCtrl=null}document.getElementById('stopBtn').style.display='none';document.getElementById('sendBtn').style.display='flex'}
-async function sChat(){const el=document.getElementById('ci0'),msg=el.value.trim();if(!msg&&!cImgs.length)return;el.value='';el.style.height='auto';document.getElementById('sendBtn').style.display='none';document.getElementById('stopBtn').style.display='flex';const a=document.getElementById('cm0');const ih=cImgs.map(i=>'<img src="'+i+'" style="max-width:100px;border-radius:6px;margin:3px">').join('');const u=document.createElement('div');u.className='cm u fu';u.innerHTML=`<div class="mw">You</div><div class="bbl">${x(msg)}${ih?'<br><div class="fx" style="flex-wrap:wrap">'+ih+'</div>':''}</div>`;a.appendChild(u);a.scrollTop=a.scrollHeight;const c=[];cImgs.forEach(i=>{const[m,b]=i.split(',');c.push({type:'image',source:{type:'base64',media_type:m.match(/:(.*?);/)?.[1]||'image/jpeg',data:b}})});cImgs=[];if(msg)c.push({type:'text',text:msg});S.ch.push({role:'user',content:c});const l=document.createElement('div');l.className='cm a fu';l.innerHTML='<div class="mw">Xylix OS · Claude</div><div class="bbl"><div class="ld"></div></div>';a.appendChild(l);a.scrollTop=a.scrollHeight;chatCtrl=new AbortController();const r=await cl(S.ch,SYS,chatCtrl.signal);chatCtrl=null;document.getElementById('stopBtn').style.display='none';document.getElementById('sendBtn').style.display='flex';S.ch.push({role:'assistant',content:r||'Error.'});let html=fm(r||'Error.');const codeMatch=r?.match(/```html\n([\s\S]*?)```/);if(codeMatch){html+=`<div style="margin-top:10px;border:1px solid var(--border);border-radius:var(--rs);overflow:hidden"><div style="padding:6px 10px;background:var(--bg3);font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between;align-items:center">Preview<button class="btn bs bsm" onclick="this.closest('.cm').querySelector('iframe').style.display=this.closest('.cm').querySelector('iframe').style.display==='none'?'block':'none'">Toggle</button></div><iframe srcdoc="${codeMatch[1].replace(/"/g,'&quot;')}" style="width:100%;height:400px;border:none;background:#fff" sandbox="allow-scripts"></iframe></div>`}l.querySelector('.bbl').innerHTML=html;a.scrollTop=a.scrollHeight}
-let coF=null;function coFH(i){if(i.files[0]){const r=new FileReader();r.onload=e=>{coF={n:i.files[0].name,c:e.target.result}};r.readAsText(i.files[0])}}
-async function sCode(){const el=document.getElementById('coi0'),msg=el.value.trim();if(!msg&&!coF)return;el.value='';el.style.height='auto';const a=document.getElementById('cm1');let d=msg,f=msg;if(coF){d+='\n📎 '+coF.n;f+='\n\nFile: '+coF.n+'\n```\n'+coF.c+'\n```';coF=null}const u=document.createElement('div');u.className='cm u fu';u.innerHTML=`<div class="mw">You</div><div class="bbl">${x(d)}</div>`;a.appendChild(u);a.scrollTop=a.scrollHeight;S.co.push({role:'user',content:f});const l=document.createElement('div');l.className='cm a fu';l.innerHTML='<div class="mw">Code Lab · Claude</div><div class="bbl"><div class="ld"></div></div>';a.appendChild(l);a.scrollTop=a.scrollHeight;const r=await cl(S.co,SYS+'\nCODE LAB: Clean production code. Pixel-perfect. Complete files.');S.co.push({role:'assistant',content:r||'Error.'});l.querySelector('.bbl').innerHTML=fm(r||'Error.');a.scrollTop=a.scrollHeight}
-function rT(){const l=document.getElementById('tl0'),t=S.t,p=t.filter(x=>!x.d),d=t.filter(x=>x.d);document.getElementById('dc').textContent=p.length+' remaining · '+d.length+' done';l.innerHTML=[...p,...d].map(z=>{const i=t.indexOf(z);return`<div class="tr ${z.d?'dn':''}"><div class="tc ${z.d?'dn':''}" onclick="tgT(${i})"></div><span class="tl">${x(z.t)}</span><span class="tt">High</span><button class="tx" onclick="dT(${i})">✕</button></div>`}).join('')}
-function aT(){const el=document.getElementById('ti0'),t=el.value.trim();if(!t)return;S.t.push({t,d:false});el.value='';localStorage.setItem('xt',JSON.stringify(S.t));rT();sbSyncTasks()}
-function tgT(i){S.t[i].d=!S.t[i].d;localStorage.setItem('xt',JSON.stringify(S.t));rT();sbSyncTasks()}
-function dT(i){const task=S.t[i];if(task.sbId)sbFetch('tasks?id=eq.'+task.sbId,'DELETE');S.t.splice(i,1);localStorage.setItem('xt',JSON.stringify(S.t));rT()}
-function rC(){const g=document.getElementById('cg0');['gc0','ic0'].forEach(id=>{const s=document.getElementById(id);if(!s)return;s.innerHTML='<option value="">None</option>'+S.c.map(c=>'<option>'+x(c.n)+'</option>').join('')});if(!S.c.length){g.innerHTML='<div class="em" style="grid-column:1/-1"><p>No characters yet.</p></div>';return}g.innerHTML=S.c.map((c,i)=>`<div class="cc"><div class="cth">${c.i?.[0]?'<img src="'+c.i[0]+'">':'No images'}</div><div class="cbd"><div class="cnm">${x(c.n)}</div><div class="cvb">${x(c.v)}</div><div style="margin-top:4px;font-size:10px;color:var(--text3)">${c.i?.length||0} refs</div><button class="btn bg bsm mt3" onclick="dCh(${i})">Delete</button></div></div>`).join('')}
-function chIP(i){const p=document.getElementById('mcip0');p.innerHTML='';Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:50px;height:50px;object-fit:cover;border-radius:5px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)})}
-function svCh(){const n=document.getElementById('mcn0').value.trim(),v=document.getElementById('mcv0').value.trim(),s=document.getElementById('mcs0').value.trim();if(!n)return;const fi=document.getElementById('mci0'),imgs=[];Promise.all(Array.from(fi.files).map(f=>new Promise(r=>{const rd=new FileReader();rd.onload=e=>{imgs.push(e.target.result);r()};rd.readAsDataURL(f)}))).then(async ()=>{S.c.push({n,v,s,i:imgs});localStorage.setItem('xc',JSON.stringify(S.c));cM('mc0');rC();const r=await sbFetch('characters','POST',{name:n,vibe:v,style:s,images:imgs});if(r&&r[0])S.c[S.c.length-1].sbId=r[0].id;localStorage.setItem('xc',JSON.stringify(S.c))})}
-function dCh(i){const ch=S.c[i];if(ch.sbId)sbFetch('characters?id=eq.'+ch.sbId,'DELETE');S.c.splice(i,1);localStorage.setItem('xc',JSON.stringify(S.c));rC()}
-async function gPlan(){const ch=document.getElementById('gc0').value;if(!ch)return;const c=S.c.find(z=>z.n===ch),o=document.getElementById('po0');o.style.display='block';o.innerHTML='<div class="ld"></div> Generating...';const r=await cl([{role:'user',content:`Content plan: ${c.n}\nVibe: ${c.v}\nStyle: ${c.s}\nPlatform: ${document.getElementById('gp0').value}\nScene: ${document.getElementById('gs0').value||'best recommendation'}\n\n1. FLUX IMAGE PROMPT\n2. KLING VIDEO PROMPT\n3. INSTAGRAM CAPTION\n4. TIKTOK CAPTION\n5. POSTING STRATEGY`}]);o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
-const STY={biblical:'Epic biblical painting, golden divine light, ornate armor, heavenly clouds, cinematic, ',instagram:'Natural DSLR, shallow DOF, golden hour, candid, ',product:'Studio photography, clean background, commercial, ',tiktok:'Casual street, authentic, natural light, '};
-let imgRefs=[];
-function imgRefPv(i){const p=document.getElementById('irp0');imgRefs=[];p.innerHTML='';const files=Array.from(i.files).slice(0,6);files.forEach(f=>{const r=new FileReader();r.onload=e=>{imgRefs.push(e.target.result);const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:50px;height:50px;object-fit:cover;border-radius:5px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)});if(i.files.length>6)alert('Max 6 reference images. Using first 6.')}
-async function gImg(){const m=document.getElementById('im0').value;let p=document.getElementById('ip0').value.trim();const r=document.getElementById('ir0').value,s=document.getElementById('is0').value;if(!p&&!imgRefs.length)return;if(s&&STY[s])p=STY[s]+p;const pv=document.getElementById('ipv0');pv.innerHTML='<div class="ld"></div>';if(imgRefs.length>0){const content=[];imgRefs.forEach(i=>{const[mt,b]=i.split(',');content.push({type:'image',source:{type:'base64',media_type:mt.match(/:(.*?);/)?.[1]||'image/jpeg',data:b}})});content.push({type:'text',text:`Generate the PERFECT Flux image prompt based on these ${imgRefs.length} reference images. The user wants: ${p||'match the reference images exactly'}. Output ONLY the optimized prompt, nothing else. Include every detail: pose, lighting, expression, clothing, background, camera angle, mood.`});const optimized=await cl([{role:'user',content}]);if(optimized&&!optimized.startsWith('Error')){p=optimized}}const sz={'9:16':'portrait_16_9','1:1':'square','4:5':'portrait_4_3','16:9':'landscape_16_9'};const res=await fl(m,{prompt:p,image_size:sz[r]||'square',num_images:1});if(res?.images?.[0]?.url)pv.innerHTML='<img src="'+res.images[0].url+'">';else pv.innerHTML='<span style="color:var(--red)">Failed</span>'}
-async function oP(id){const el=document.getElementById(id),o=el.value.trim();if(!o)return;el.value='Optimizing...';const r=await cl([{role:'user',content:'Optimize this prompt for max quality. Output ONLY the prompt.\n\nOriginal: '+o}]);el.value=r||o}
-function vtab(el,t){document.querySelectorAll('#vt0 .tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');['tk','yt','dc'].forEach(x=>document.getElementById('vt-'+x).style.display=x===t?'block':'none')}
-let tkI=null;function tkIP(i){if(!i.files[0])return;const r=new FileReader();r.onload=e=>{tkI=e.target.result;document.getElementById('tkid0').innerHTML='<img src="'+e.target.result+'" style="max-width:100%;max-height:80px;border-radius:5px">'};r.readAsDataURL(i.files[0])}
-function tkVP(i){if(!i.files[0])return;document.getElementById('tkvd0').innerHTML='<span style="font-size:11px">✓ '+i.files[0].name+'</span>'}
-async function gTkV(){if(!tkI){alert('Upload image');return}const pv=document.getElementById('tkpv0');pv.innerHTML='<div class="ld"></div> Generating...';const r=await fl('fal-ai/kling-video/v3/motion-control',{prompt:document.getElementById('tkp0').value||'Copy the exact motion from the reference video naturally',image_url:tkI,aspect_ratio:'9:16'});if(r?.video?.url)pv.innerHTML='<video src="'+r.video.url+'" controls autoplay style="max-height:380px"></video>';else pv.innerHTML='<span style="color:var(--red)">Failed. '+(r?.detail||JSON.stringify(r))+'</span>'}
-async function gYTS(){const s=document.getElementById('yts0').value.trim();if(!s)return;const o=document.getElementById('yto0');o.style.display='block';o.innerHTML='<div class="ld"></div> Building scenes...';const st={biblical:'Epic biblical, golden divine light, ornate armor, cinematic 9:16',anime:'Anime, vibrant, dramatic 9:16',realistic:'Photorealistic cinematic 9:16',painterly:'Dark Renaissance oil painting 9:16'};const r=await cl([{role:'user',content:`Viral YouTube Shorts producer. Christian/Bible content.\nTOPIC: ${s}\nSTYLE: ${st[document.getElementById('yta0').value]}\nLANG: ${document.getElementById('ytl0').value==='both'?'English+Spanish':'English'}\n\nBreak into 4-8 scenes. Each scene needs:\n1. NARRATION TEXT (English)${document.getElementById('ytl0').value!=='en'?'\n2. SPANISH NARRATION':''}  \n3. FLUX 2 PRO IMAGE PROMPT (locked style prefix across ALL scenes for consistency)\n4. KLING ANIMATION PROMPT (subtle motion: slow zoom, parallax, light flicker, fabric movement — makes the image feel alive, not static)\n5. BOLD TEXT OVERLAY (e.g. "NUMBER FOUR: URIEL.")\n6. TRANSITION (zoom, fade, swipe between scenes)\n\nCRITICAL RULES:\n- First 3 seconds = VISUAL HOOK. Most dramatic/epic image before narration starts.\n- Each scene is an ANIMATED VIDEO CLIP (8-15 sec), not a static image. Use Kling to add subtle cinematic motion.\n- Animated subtitles: bold white, key words (names, divine actions) highlighted in GOLD, pop-on-beat timing.\n- All image prompts share the EXACT SAME style prefix so every frame looks like one video.\n- ~60 seconds total.\n- CTA at end: "${document.getElementById('ytc0').value}"\n- Narrator voice: deep, dramatic, authoritative. ElevenLabs.\n- For Spanish: separate narration track, same visuals.`}]);o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
-async function gAd(){const p=document.getElementById('ap0').value.trim();if(!p)return;const o=document.getElementById('aro0');o.innerHTML='<div class="cd"><div class="ld"></div> Researching...</div>';const r=await cl([{role:'user',content:`INDEFATIGABLE ad research: ${p}\nPlatform: ${document.getElementById('apl0').value}\nAudience: ${document.getElementById('aa0').value||'determine best'}\n\n1. MARKET ANALYSIS\n2. COMPETITOR ANALYSIS\n3. AD COPY (3 variations)\n4. VIDEO SCRIPT\n5. IMAGE PROMPT\n6. TARGETING`}],SYS,null,true,'claude-sonnet-4-20250514');o.innerHTML='<div class="cd">'+fm(r)+'</div>'}
-function dtab(el,t){document.querySelectorAll('#dt0 .tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');['find','val','store'].forEach(x=>document.getElementById('dt-'+x).style.display=x===t?'block':'none')}
-async function fProd(){const o=document.getElementById('dpo0');o.innerHTML='<div class="ld"></div>';const r=await cl([{role:'user',content:`FIND winning dropshipping products.\nNiche: ${document.getElementById('dn0').value||'All'}\nBudget: ${document.getElementById('db0').value}\nFB Ad Library, Trends, velocity, margins. EVERY product 10/10.`}],SYS,null,true,'claude-sonnet-4-20250514');o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
-async function vProd(){const p=document.getElementById('vp0').value.trim();if(!p)return;const o=document.getElementById('vpo0');o.innerHTML='<div class="ld"></div>';const r=await cl([{role:'user',content:`Validate: ${p}\nFB Ad Library, Trends, velocity, competition, margins. VERDICT: X/10.`}],SYS,null,true,'claude-sonnet-4-20250514');o.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(r)+'</div>'}
-async function bStore(){const p=document.getElementById('sp0').value.trim();if(!p)return;const o=document.getElementById('sto0');o.innerHTML='<div class="ld"></div>';const r=await cl([{role:'user',content:`PERFECT Shopify landing page:\nProduct: ${p}\nDesc: ${document.getElementById('sd0').value}\nPrice: ${document.getElementById('spr0').value}\nAbove fold, conversion-optimized, mobile-first. Complete HTML.`}]);o.innerHTML='<div class="cd" style="background:var(--bg2)"><div class="cb">'+x(r)+'</div></div>'}
-function rB(){const b=S.b,w=b.filter(x=>x.r==='win').length,l=b.filter(x=>x.r==='loss').length,t=w+l;const pnl=b.reduce((s,z)=>{if(z.r==='win')return s+((z.p||0)-(z.s||0));if(z.r==='loss')return s-(z.s||0);return s},0);document.getElementById('bw0').textContent=w;document.getElementById('bl0').textContent=l;document.getElementById('bwr0').textContent=t>0?Math.round(w/t*100)+'%':'0%';const pe=document.getElementById('bpnl0');pe.textContent=(pnl>=0?'+$':'-$')+Math.abs(pnl).toFixed(2);pe.className='sn '+(pnl>=0?'g':'r');
-// Streak calc
-const settled=b.filter(z=>z.r==='win'||z.r==='loss');let streak=0,streakType='';if(settled.length){const last=settled[settled.length-1].r;streakType=last;streak=1;for(let i=settled.length-2;i>=0;i--){if(settled[i].r===last)streak++;else break}}const strEl=document.getElementById('bstr0');strEl.textContent=streak>0?(streakType==='win'?'W':'L')+streak:'—';strEl.className='sn '+(streakType==='win'?'g':streakType==='loss'?'r':'');
-const h=document.getElementById('bh0');if(!b.length){h.innerHTML='<div class="em"><p>No bets yet.</p></div>';return}h.innerHTML=[...b].reverse().map((z,i)=>{const idx=b.length-1-i;const col=z.r==='win'?'var(--gb)':z.r==='loss'?'var(--rb)':z.r==='pending'?'var(--yb)':'var(--bg3)';const tcol=z.r==='win'?'var(--gt)':z.r==='loss'?'var(--rt)':z.r==='pending'?'var(--yellow)':'var(--text3)';const ptypes=z.propTypes?`<div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap">${z.propTypes.split(',').filter(Boolean).map(t=>'<span style="font-size:9px;background:var(--bg3);color:var(--text3);padding:1px 5px;border-radius:3px">'+x(t)+'</span>').join('')}</div>`:'';return`<div class="tr"><span class="tt" style="background:${col};color:${tcol}">${z.r.toUpperCase()}</span><span class="tl">${x(z.d)}${ptypes}</span><span style="color:var(--text3);font-size:12px;font-family:JetBrains Mono">$${z.s}${z.r==='win'?' → $'+z.p:''}</span></div>`}).join('')}
-async function gPar(){
-const prog=document.getElementById('parProgress');
-const step=document.getElementById('parStep');
-const bar=document.getElementById('parBar');
-const cards=document.getElementById('parCards');
-const watch=document.getElementById('parWatch');
-const details=document.getElementById('parDetails');
-const research=document.getElementById('parResearch');
-document.getElementById('parGenBtn').disabled=true;
-prog.style.display='block';cards.style.display='none';watch.style.display='none';details.style.display='none';
+'use strict';
+// ═══════════════════════════════════════════════════════════════
+//  XYLIX PARLAY ENGINE V4
+//  All 20+ flaws fixed. 16-step methodology. Zero tolerance.
+//  $25 flat stake. DraftKings only. NBA only.
+// ═══════════════════════════════════════════════════════════════
 
-const now=new Date();const ct=new Date(now.toLocaleString('en-US',{timeZone:'America/Chicago'}));const hour=ct.getHours();const isLate=hour>=22||hour<6;
-const dateStr=isLate?new Date(ct.getTime()+86400000).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):ct.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-const timeNote=isLate?'It is late night Central Time. Games are done. Analyze TOMORROW ('+dateStr+').':'Today is '+dateStr+'. Current time: '+ct.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' Central.';
-const ls=S.b.filter(b=>b.l).map(b=>`${b.r.toUpperCase()}: ${b.d} — ${b.l}`).join('\n');
-const propHist=S.b.filter(b=>b.r==='win'||b.r==='loss').map(b=>`${b.r}: ${b.d}`).join('\n');
-S.b=S.b.filter(z=>z.r!=='pending'||!z.auto);localStorage.setItem('xb',JSON.stringify(S.b));
+const API_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000/api/claude'
+  : '/api/claude';
 
-try{
-// STEP 1: Injuries & Slate
-step.textContent='Step 1/4 — Searching injuries and today\'s slate across all sports...';bar.style.width='10%';
-const s1=await cl([{role:'user',content:`${timeNote}\n\nSearch for TODAY's complete injury report and game slate. I need:\n1. Every NBA game scheduled today with approximate win probabilities or spreads\n2. ALL confirmed injuries, questionable players, and players ruled OUT across every NBA team playing today\n3. Flag which absences create usage bumps for other players (e.g. if Star A is out, Player B gets more touches)\n4. Flag which games are 80%+ blowout risk\n\nBe specific. Real names, real injury statuses, real games. Search the web for this information.\n\nOutput as a structured list. No analysis yet — just the raw data.`}],SYS,null,true,'claude-sonnet-4-20250514');
-bar.style.width='25%';
+const STORAGE_KEY = 'xylix_v4_parlays';
 
-// STEP 2: Player Stats & Splits
-step.textContent='Step 2/4 — Researching player stats, splits, and DraftKings props...';
-const s2=await cl([{role:'user',content:`Based on this injury/slate data:\n\n${s1}\n\nNow search for the SPECIFIC stats I need to build parlays. For each promising player (ones with usage bumps from injuries, favorable matchups, or clean floors):\n\n1. Season averages for ALL stat categories (pts, ast, reb, P+A, P+R, PRA)\n2. Teammate-out splits if a key player is absent (minimum 10 game sample)\n3. Last 5-10 game performance trends\n4. Matchup-specific data — what does their opponent give up?\n5. Home/away splits if relevant\n\nAlso search for:\n6. Current DraftKings prop lines and alt lines for these players — search "DraftKings [player name] props today" or "[player name] DraftKings odds"\n7. Any same-game parlay opportunities where team winning correlates with player performance\n8. Team totals — any obvious over/under plays based on pace and defense matchups\n\nSearch the web for real, current stats. Don't guess. If you can't verify a number, say so.\n\nOutput the raw stats. No parlay picks yet.`}],SYS,null,true,'claude-sonnet-4-20250514');
-bar.style.width='55%';
+// ───────────────────────────────────────────────────────────────
+//  STEP 1: SCHEDULE SCOUT PROMPT
+// ───────────────────────────────────────────────────────────────
+const PROMPT_SCHEDULE = `You are a professional NBA schedule analyst for a high-precision betting operation. Your job is to gather complete game context for today's or tomorrow's NBA slate.
 
-// STEP 3: Verify & Build
-step.textContent='Step 3/4 — Cross-checking stats and building parlays...';
-const s3=await cl([{role:'user',content:`Here is the injury data:\n${s1}\n\nHere are the player stats and DraftKings lines:\n${s2}\n\nNow BUILD THE PARLAYS. Apply the full 8-step methodology:\n\nSTEP 1: Injury/availability — already done above, use this data\nSTEP 2: Blowout screening — 80%+ win probability games get alt lines ONLY or moneylines. KAT scored 22 on 22.5 line in blowout (missed by 0.5). Jokic scored 8pts in a 124-96 win. Stars get benched Q3/Q4.\nSTEP 3: Teammate-specific splits — only trust 10+ game samples. How does Player X perform when teammate Y is out?\nSTEP 4: Matchup analysis — what does opponent give up by position and stat category? Pace, defense, back-to-back?\nSTEP 5: Exact DraftKings lines — standard vs alt vs combo. Where is the value? Where is the trap?\nSTEP 6: Path-to-win — can each leg hit in 3 quarters? How many things need to go right? Fewer = better.\nSTEP 7: Trap detection — overpriced obvious spots, teammate-dependent assists, volatile categories, recency bias, made-3s volatility\nSTEP 8: Final review — look at every candidate one more time. Is there a cleaner leg you missed? Is any leg secretly dependent on another? Would you bet your own money on every single leg?\n\nSCAN ALL PROP TYPES — pick whatever has the HIGHEST probability of hitting:\n- Player points, assists, rebounds, combos (P+A, P+R, PRA)\n- Alt lines on ALL of the above\n- Team moneylines, spreads, totals (over/under)\n- Same-game parlays (team win + player prop when positively correlated)\n- Steals, blocks, steals+blocks for defensive specialists\n- Made threes ONLY if player hits threshold in 90%+ of recent games\n- ANY other prop type that has a clean path to winning\n\nRULES:\n- Three legs, three independent NBA games\n- NEVER double-doubles or triple-doubles (extra failure conditions)\n- Assist props OK for elite playmakers (Jokic, Trae, Haliburton) in competitive games only\n- If the slate is genuinely bad across all sports, say so — don't force picks\n- Guaranteed-first philosophy. Boring wins count. We want to WIN.\n- Recommend stake sizing: Parlay 1 gets 60% budget, Parlay 2 gets 40%\n\n${ls?'LESSONS FROM PAST BETS (these are CRITICAL — apply every single one):\n'+ls+'\n':''}${propHist?'BET HISTORY (for prop type hit rate patterns):\n'+propHist+'\n':''}\nOUTPUT FORMAT — THIS IS CRITICAL, FOLLOW EXACTLY:\n\nFirst output a JSON block (this gets parsed for the UI cards):\n\`\`\`json\n{"parlays":[{"name":"Parlay 1 — Safest","confidence":70,"stake":25,"legs":[{"prop":"SGA Over 20.5 Points","game":"OKC vs BKN","type":"points_alt","reason":"Usage bump with Jalen Williams out, 31.6 PPG, alt line survives blowout"},{"prop":"Randle Over 20.5 Points","game":"MIN vs UTA","type":"points_alt","reason":"26.4 PPG without Ant Edwards, lower threshold beats blowout risk"},{"prop":"Brown Over 24.5 Points","game":"BOS vs GSW","type":"points","reason":"28.4 PPG, Wiggins out, 24 straight 20+ games, home"}]},{"name":"Parlay 2 — More Payout","confidence":62,"stake":15,"legs":[{"prop":"Example prop","game":"Example game","type":"type","reason":"reason"},{"prop":"Example","game":"Example","type":"type","reason":"reason"},{"prop":"Example","game":"Example","type":"type","reason":"reason"}]}],"standalone":{"prop":"Best single leg","game":"Game","type":"type","reason":"Why this is the strongest"},"watchlist":["Player A (injury) — verify before tip","Player B (questionable) — monitor"]}\n\`\`\`\n\nThen output the full detailed research analysis with:\n**SLATE + WIN PROBABILITIES**\n**PROP TYPES SCANNED** (which categories looked clean, which were traps)\n**CANDIDATE BREAKDOWN** (8-12 best candidates across ALL prop types)\n**TIER RANKING** (Tier 1: safest legs, Tier 2: viable, Tier 3: traps to avoid)\n**DETAILED REASONING** for each parlay leg\n**WHAT KILLS EACH PARLAY** (honest risk assessment)\n**DO NOT CASH OUT EARLY** — trust the methodology, let it ride unless a key player gets injured mid-game`}],SYS,null,true,'claude-sonnet-4-20250514');
-bar.style.width='90%';
+TIME RULE (Central Time):
+- Before 10pm CT with untipped games remaining → analyze TODAY's remaining games
+- After 10pm CT OR all today's games have tipped → analyze TOMORROW's full slate
+- If only 1 game remains and it has already tipped → analyze TOMORROW
 
-// STEP 4: Parse and display
-step.textContent='Step 4/4 — Formatting results...';
-bar.style.width='100%';
+RESEARCH TASKS — search thoroughly for all of the following:
 
-// Parse JSON for clean cards
-let parsed=null;
-try{const jm=s3.match(/```json\n([\s\S]*?)```/);if(jm)parsed=JSON.parse(jm[1])}catch(e){console.log('Parse error',e)}
+1. GAMES: All games on the target slate. Teams, tip times (CT), TV network.
 
-// Display clean parlay cards
-if(parsed&&parsed.parlays){
-let cardHtml='';
-parsed.parlays.forEach((p,i)=>{
-cardHtml+=`<div style="background:${i===0?'var(--al)':'var(--bg3)'};border:1px solid ${i===0?'#bfdbfe':'var(--border)'};border-radius:var(--r);padding:16px;margin-bottom:12px">
-<div class="fx jb ac" style="margin-bottom:12px">
-<div><div style="font-family:Outfit;font-weight:700;font-size:15px">${x(p.name)}</div>
-<div style="font-size:11px;color:var(--text3);margin-top:2px">Confidence: ${p.confidence||'~65'}% · Recommended: $${p.stake||25}</div></div>
-<div style="background:${i===0?'var(--accent)':'var(--text2)'};color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">${i===0?'SAFEST':'MORE PAYOUT'}</div>
-</div>`;
-(p.legs||[]).forEach((leg,li)=>{
-cardHtml+=`<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px">
-<div style="background:var(--accent);color:#fff;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">${li+1}</div>
-<div style="flex:1"><div style="font-weight:700;font-size:13px">${x(leg.prop)}</div>
-<div style="font-size:11px;color:var(--text3);margin-top:2px">${x(leg.game)} · ${x(leg.type||'')}</div>
-<div style="font-size:12px;color:var(--text2);margin-top:4px">${x(leg.reason)}</div></div>
-</div>`;});
-cardHtml+=`</div>`;});
+2. WIN PROBABILITIES & SPREADS: Vegas moneyline-derived win probabilities for each team. Point spread. Total (over/under).
+   - Flag BLOWOUT RISK if: win probability >85% OR spread >14 points
 
-// Standalone leg
-if(parsed.standalone){
-cardHtml+=`<div style="background:var(--gb);border:1px solid #a7f3d0;border-radius:var(--r);padding:14px;margin-bottom:12px">
-<div style="font-family:Outfit;font-weight:700;font-size:13px;margin-bottom:6px">🏆 STRONGEST STANDALONE LEG</div>
-<div style="font-weight:600;font-size:13px">${x(parsed.standalone.prop)}</div>
-<div style="font-size:11px;color:var(--text3);margin-top:2px">${x(parsed.standalone.game)}</div>
-<div style="font-size:12px;color:var(--text2);margin-top:4px">${x(parsed.standalone.reason)}</div>
-</div>`;}
+3. BACK-TO-BACK DETECTION: For every team, check if they played yesterday.
+   - If yes: B2B NIGHT 2. Also determine: same timezone (easier) vs coast-to-coast (harder).
+   - Coast-to-coast = West Coast team playing East Coast game or vice versa = severe fatigue.
 
-cards.innerHTML=cardHtml;cards.style.display='block';
+4. 3-IN-4 NIGHT DETECTION: Is any team playing their 3rd game in 4 nights? Even worse than a simple B2B.
 
-// Watchlist
-if(parsed.watchlist&&parsed.watchlist.length){
-let wHtml=`<div style="background:var(--yb);border:1px solid #fde68a;border-radius:var(--r);padding:14px">
-<div style="font-family:Outfit;font-weight:700;font-size:13px;margin-bottom:8px">⚠️ CHECK BEFORE LOCKING</div>`;
-parsed.watchlist.forEach(w=>{wHtml+=`<div style="font-size:12px;color:var(--yellow);margin-bottom:4px">• ${x(w)}</div>`});
-wHtml+=`</div>`;watch.innerHTML=wHtml;watch.style.display='block';}
+5. TRAVEL DIRECTION (for B2B teams): Westward travel is MORE disruptive to circadian rhythm than eastward. Note travel direction for all B2B teams.
 
-// Auto-log
-parsed.parlays.forEach(p=>{
-const legDescs=(p.legs||[]).map(l=>l.prop).join(' + ');
-S.b.push({d:p.name+': '+legDescs,s:p.stake||25,r:'pending',p:0,l:'',auto:true,date:dateStr,propTypes:(p.legs||[]).map(l=>l.type).join(',')});
-});
-localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets();
-}else{
-cards.innerHTML='<div class="cd" style="background:var(--bg2)">'+fm(s3)+'</div>';cards.style.display='block';
-}
+6. DENVER ALTITUDE FLAG: Any game at Ball Arena (Denver Nuggets home) must be flagged. Visiting teams playing at altitude (5,280 ft) suffer measurable cardiovascular decline, especially in 4th quarter. Home team advantage is amplified here.
 
-// Full research in collapsible
-const fullResearch=s3.replace(/```json\n[\s\S]*?```/,'').trim();
-research.innerHTML='<div style="font-size:13px;line-height:1.6">'+fm(fullResearch)+'</div>';
-details.style.display='block';
+7. PLAYOFF / MOTIVATION CONTEXT: Check current standings. For each team:
+   - Already locked into seeding? (rest risk high, load management possible)
+   - Fighting for playoff spot? (full effort, stars playing all minutes)
+   - Eliminated or tanking? (reduced effort, stars may be rested)
+   - Rivalry or nationally-televised game? (extra motivation)
 
-}catch(e){
-cards.innerHTML='<div style="color:var(--red);padding:12px">Error: '+e.message+'</div>';cards.style.display='block';
-}
+OUTPUT FORMAT:
+- State clearly: "Analyzing [TODAY/TOMORROW] — [Date]"
+- For each game: Teams | Tip time CT | Win prob | Spread | Total | B2B flags | Altitude flag | Motivation context
+- Highlight all BLOWOUT RISK games prominently
+- Highlight all B2B situations
+- This data feeds strict prop filtering. Be thorough and accurate.`;
 
-prog.style.display='none';document.getElementById('parGenBtn').disabled=false;
-}
-async function checkRes(){const pending=S.b.filter(z=>z.r==='pending');if(!pending.length){alert('No pending bets to check');return}
-const cards=document.getElementById('parCards');
-const details=document.getElementById('parDetails');
-const research=document.getElementById('parResearch');
-const prog=document.getElementById('parProgress');
-const step=document.getElementById('parStep');
-const bar=document.getElementById('parBar');
-prog.style.display='block';step.textContent='Checking final scores...';bar.style.width='30%';
-const descs=pending.map(z=>z.d).join('\n');
-const r=await cl([{role:'user',content:`Check the final results for these pending bets. Search for actual final box scores and player stats.\n\nPENDING BETS:\n${descs}\n\nFor each bet leg, look up the REAL final stats. Determine if the overall parlay WON (all legs hit), LOST (any leg missed), or PUSHED.\n\nOutput a JSON block:\n\`\`\`json\n{"results":[{"desc":"first 30 chars of bet description","result":"win or loss or push","payout":68.22,"lesson":"specific lesson — what worked, what failed, prop type analysis"}]}\n\`\`\`\n\nThen after the JSON, give a brief breakdown of each leg's actual result with real final stats.`}],SYS,null,true,'claude-sonnet-4-20250514');
-bar.style.width='100%';
-try{const jm=r.match(/```json\n([\s\S]*?)```/);if(jm){const res=JSON.parse(jm[1]);if(res.results){res.results.forEach(rr=>{const match=S.b.find(z=>z.r==='pending'&&z.d.includes(rr.desc?.substring(0,20)));if(match&&rr.result!=='pending'){match.r=rr.result;match.p=rr.payout||0;match.l=rr.lesson||''}});localStorage.setItem('xb',JSON.stringify(S.b));rB();sbSyncBets()}}}catch(e){console.log('Results parse error',e)}
-const fullText=r.replace(/```json\n[\s\S]*?```/,'').trim();
-research.innerHTML='<div style="font-size:13px;line-height:1.6">'+fm(fullText)+'</div>';
-details.style.display='block';
+// ───────────────────────────────────────────────────────────────
+//  STEP 2: INJURY SCOUT PROMPT
+// ───────────────────────────────────────────────────────────────
+const PROMPT_INJURY = `You are an NBA injury and availability analyst for a professional betting operation. Research player status for every game on the provided slate.
 
-// Show result cards
-let resHtml='';
-S.b.filter(z=>z.r==='win'||z.r==='loss').slice(-4).reverse().forEach(b=>{
-const isW=b.r==='win';
-resHtml+=`<div style="background:${isW?'var(--gb)':'var(--rb)'};border:1px solid ${isW?'#a7f3d0':'#fecaca'};border-radius:var(--r);padding:12px;margin-bottom:8px">
-<div class="fx jb ac"><span style="font-weight:700;font-size:13px">${isW?'✅ WON':'❌ LOST'}</span><span style="font-family:JetBrains Mono;font-size:12px">${isW?'+$'+(((b.p||0)-(b.s||0)).toFixed(2)):'-$'+(b.s||0).toFixed(2)}</span></div>
-<div style="font-size:12px;color:var(--text2);margin-top:4px">${x(b.d)}</div>
-${b.l?'<div style="font-size:11px;color:var(--text3);margin-top:4px;font-style:italic">Lesson: '+x(b.l)+'</div>':''}
-</div>`;});
-if(resHtml){cards.innerHTML=resHtml;cards.style.display='block';}
-prog.style.display='none';
-}
-function lBet(){const b={d:document.getElementById('mbd0').value.trim(),s:parseFloat(document.getElementById('mbs0').value)||0,r:document.getElementById('mbr0').value,p:parseFloat(document.getElementById('mbp0').value)||0,l:document.getElementById('mbl0').value.trim()};if(!b.d)return;S.b.push(b);localStorage.setItem('xb',JSON.stringify(S.b));cM('mb0');rB();sbSyncBets()}
-function clIP(i){const p=document.getElementById('clp0');S.ci=[];p.innerHTML='';Array.from(i.files).forEach(f=>{const r=new FileReader();r.onload=e=>{S.ci.push(e.target.result);const img=document.createElement('img');img.src=e.target.result;img.style.cssText='width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';p.appendChild(img)};r.readAsDataURL(f)})}
-async function clPr(){const n=document.getElementById('cn0').value.trim(),u=document.getElementById('cu0').value.trim(),c=document.getElementById('cc0').value.trim(),ins=document.getElementById('cins0').value.trim();if(!n&&!u&&!S.ci.length)return;const o=document.getElementById('clo0');o.style.display='block';document.getElementById('clr0').textContent='Generating...';const ct=[];S.ci.forEach(i=>{const[m,b]=i.split(',');ct.push({type:'image',source:{type:'base64',media_type:m.match(/:(.*?);/)?.[1]||'image/png',data:b}})});ct.push({type:'text',text:`Clone ONE-TO-ONE HTML.\nProject: ${n||'Clone'}\n${u?'URL: '+u:''}\n${c?'Code:\n'+c:''}\n${ins?'Instructions: '+ins:''}\nPixel perfect. Complete HTML+CSS+JS.`});const r=await cl([{role:'user',content:ct}]);document.getElementById('clr0').textContent=r||'Error.'}
-function sK(){['a','f','e'].forEach(k=>{const v=document.getElementById('k'+k+'0').value;if(v)localStorage.setItem('xk_'+k,v);document.getElementById('s'+k+'0').className='kd '+(v?'y':'n')});localStorage.setItem('xk_m',document.getElementById('km0').value)}
-function lK(){['a','f','e'].forEach(k=>{const v=localStorage.getItem('xk_'+k)||'';document.getElementById('k'+k+'0').value=v;document.getElementById('s'+k+'0').className='kd '+(v?'y':'n')});document.getElementById('km0').value=localStorage.getItem('xk_m')||'claude-opus-4-20250514'}
-function clrAll(){if(!confirm('Clear ALL data?'))return;['xt','xc','xb','xk_a','xk_f','xk_e','xk_m'].forEach(k=>localStorage.removeItem(k));sbClear();location.reload()}
+RESEARCH FOR EACH GAME:
 
-// SUPABASE PERSISTENCE
-const SB_URL='https://vhypjmqwioimwzssjusb.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeXBqbXF3aW9pbXd6c3NqdXNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTIxNTQsImV4cCI6MjA4OTQ2ODE1NH0.yN-9vzzF1kLvi3BVAtpQ4tDGZ1BHtXvkpjBXX3q2ewA';
-async function sbFetch(table,method='GET',body=null){
-  try{const opts={method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':''}};
-  if(body)opts.body=JSON.stringify(body);
-  const r=await fetch(SB_URL+'/rest/v1/'+table,opts);
-  return await r.json()}catch(e){console.log('Supabase error:',e);return null}}
+1. OFFICIAL NBA INJURY REPORT: Check today's official injury designations.
+   - OUT: Cannot play
+   - QUESTIONABLE: <50% chance of playing
+   - PROBABLE: Likely plays but uncertain
 
-async function sbSyncTasks(){
-  const tasks=S.t;
-  // Upsert all tasks
-  for(const t of tasks){
-    if(!t.sbId){
-      const r=await sbFetch('tasks','POST',{text:t.t,done:t.d||false});
-      if(r&&r[0])t.sbId=r[0].id;
-    }else{
-      await sbFetch('tasks?id=eq.'+t.sbId,'PATCH',{done:t.d||false});
-    }
+2. BEAT REPORTER INTEL: Search Twitter/X beat reporters for any late injury news not yet on official report.
+
+3. MINUTE RESTRICTIONS: A player can be "probable" but limited to 20-25 minutes instead of normal 34. Search for any conditioning/load restriction language. This is critical — a restricted player's prop value changes completely.
+
+4. INJURY TYPE CLASSIFICATION:
+   - SOFT TISSUE (hamstring, quad, calf, groin, hip flexor): High re-injury risk. Even if "probable," explosive movements may be limited. Treat as elevated risk.
+   - BONE/STRUCTURAL (fracture, stress): Usually OUT.
+   - MINOR (ankle sprain fully healed, illness recovered): Lower risk if confirmed full practice.
+
+5. LOAD MANAGEMENT: Late March/April — identify any star players on teams with locked-in seeding. These players may be rested without warning even if healthy. Flag all stars on locked-in teams.
+
+6. KEY PLAYERS RETURNING: Is anyone returning from injury tonight? If so, which teammates lose usage? This cascades into prop values.
+
+7. TOP 5 CONTRIBUTORS: For each team, list their top 5 stat contributors and their status tonight.
+
+OUTPUT: Organized by game. For each player of note: Name | Status | Injury type if relevant | Minute restriction if known | Risk level (LOW/MEDIUM/HIGH) | Notes.`;
+
+// ───────────────────────────────────────────────────────────────
+//  STEP 3: STATS SCOUT PROMPT
+// ───────────────────────────────────────────────────────────────
+const PROMPT_STATS = `You are a quantitative NBA analyst for a professional betting operation. Gather deep statistical context for every available (non-injured, non-questionable) key player on the provided slate.
+
+FOR EACH GAME — research all of the following:
+
+1. TEAM PACE: Possessions per 48 minutes for both teams.
+   - League avg = ~100. Fast = >102. Slow = <98.
+   - Calculate projected game pace: average of both teams' pace.
+   - PACE-UP: Both teams fast or one much faster than other = more possessions = better for overs.
+   - PACE-DOWN: Both slow = fewer possessions = overs harder.
+
+2. DEFENSIVE RATINGS — POSITION SPECIFIC:
+   - Each team's overall DRtg (points allowed per 100 possessions)
+   - More importantly: Points allowed to each POSITION (PG, SG, SF, PF, C) — find this from NBA.com or Basketball Reference opponent splits
+   - Rank: TOP-5 defense at position = major headwind. BOTTOM-10 = tailwind.
+
+3. FOR EACH AVAILABLE KEY PLAYER:
+   a. Season average: Points, Rebounds, Assists
+   b. Last 10 game average (same stats) — is it trending up or down vs season?
+   c. Last 5 game average — recent form
+   d. HOME average vs AWAY average for their primary prop stat
+   e. Season usage rate % and last 10 game usage rate %
+   f. VOLATILITY: Max and min in last 15 games. Standard deviation estimate. Is this a consistent or boom/bust player?
+   g. OUTLIER FLAG: Did they score 10+ above their average in either of their last 2 games? If yes, regression risk is HIGH.
+   h. TEAMMATE SITUATION: Exact per-game average WITH vs WITHOUT any key teammate who is in/out tonight.
+   i. DK LINE: What is the current DraftKings line for their main prop (points/rebounds/assists)?
+
+4. LINE MOVEMENT: For the biggest prop candidates, what was the DraftKings opening line vs current line?
+   - Line moved toward the over (higher) = sharp money on over = positive signal
+   - Line moved toward under (lower) = sharp money on under = warning signal
+
+5. REFEREE CREW: Who are tonight's referee assignments? Are any refs known for high-foul rate? (High foul games = more FTs, flow disruptions, star foul trouble in Q2/Q4)
+
+6. COACHING TENDENCIES:
+   - Does either coach pull stars early in blowouts? (kills points props)
+   - Known for unconventional rotations? (uncertainty)
+   - Load management history in late season?
+
+7. DENVER ALTITUDE (if applicable): If game is at Ball Arena, Denver — visiting player stats should be adjusted down 3-5% for cardiovascular strain, especially for overs on visiting players in second half.
+
+8. PUBLIC BETTING BIAS NOTE: Star player OVER props attract heavy public money. This inflates over lines above true probability. Check if any major star's over line appears inflated vs their adjusted average. The under may have better value in those cases.
+
+OUTPUT: Organized by game. Be specific with numbers. Every data point matters.`;
+
+// ───────────────────────────────────────────────────────────────
+//  STEP 4: ADVANCED CONTEXT PROMPT
+// ───────────────────────────────────────────────────────────────
+const PROMPT_CONTEXT = `You are an advanced NBA situational analyst. Using the schedule, injury, and stats data provided, perform additional layers of analysis before final parlay construction.
+
+TASKS:
+
+1. REGRESSION-TO-MEAN SCAN:
+   - Review each player's last 3 games vs their 15-game average.
+   - If a player just had an outlier (10+ above average in either of last 2 games): ELIMINATE them. Mean reversion is statistically inevitable. Sportsbooks will set their line at the outlier level. The public will chase. We do not.
+   - Example: Player averages 22pts. Scored 34 last game. DK line is now 25.5. ELIMINATE. Book set the line high, public chasing outlier = trap.
+
+2. CONFIRMATION BIAS CHECK (DEVIL'S ADVOCATE):
+   For each player who has survived so far, actively try to DESTROY their candidacy:
+   - "What is the single most likely reason this prop fails tonight?"
+   - "Is there any data point I'm ignoring because I WANT this pick to work?"
+   - "Does the opponent have any recent defensive performances that contradict the stats?"
+   - "Is there any scheduling quirk I've missed?"
+   - If you find a legitimate unaddressed risk: eliminate the candidate.
+   - This step must be GENUINELY adversarial. Don't just rubber-stamp picks.
+
+3. SAMPLE SIZE VALIDATION:
+   - If a player changed teams mid-season or their coach changed systems recently: Only use games in the NEW system. Ignore prior-system games.
+   - Minimum 8 games in current situation for valid trend data.
+
+4. SEASON STAGE URGENCY:
+   Review each team's current standings position and how it affects player motivation:
+   - Stars on teams locked into seeding: Add to elimination list (load management risk)
+   - Stars on teams fighting for a spot: Premium candidates (guaranteed full effort)
+   - Tanking teams: Eliminate entirely (unpredictable rotations, might rest stars)
+
+5. PUBLIC OVER TRAP IDENTIFICATION:
+   - Stars with nationally recognized names attract public over bets.
+   - If a player's current DK line is ABOVE their adjusted calculated threshold (even by 0.5): it's a public-inflated line. ELIMINATE or target the under instead.
+   - We never chase public-inflated lines.
+
+6. FINAL CANDIDATE LIST:
+   After all these filters, produce a ranked list of SURVIVING candidates in order of confidence.
+   Format: Player | Prop | Game | Approx DK Line | Projected threshold | Confidence tier (HIGH/MEDIUM)
+   Only include players who passed ALL prior checks.`;
+
+// ───────────────────────────────────────────────────────────────
+//  STEP 5: BUILD PARLAY PROMPT (THE CORE ENGINE)
+// ───────────────────────────────────────────────────────────────
+const PROMPT_BUILD = `You are XYLIX PARLAY ENGINE V4 — the most rigorous NBA prop betting system ever built. You have been given comprehensive 4-layer research. Your job is to apply a strict 16-step methodology and output only the highest-confidence parlay for tonight.
+
+CORE PHILOSOPHY:
+• Every rule is absolute. No exceptions. No "but this time..."
+• Conservative thresholds that pass every filter beat aggressive picks that feel good.
+• A no-parlay day is ALWAYS better than a forced bad parlay.
+• $25 flat stake on DraftKings. 3 legs standard. 2 legs only if just 2 ultra-clean picks exist. NEVER 1 or 4+.
+• All legs from DIFFERENT games. No same-game correlation.
+
+════════════════════════════════════════
+STEP 1 — BLOWOUT TIERS (HARD RULES)
+════════════════════════════════════════
+TIER 1 — DANGER (>85% win prob OR spread >14):
+→ ZERO points props from either team. Non-negotiable.
+→ ONLY rebounds/assists/steals/blocks props allowed.
+→ Set threshold ≥20% BELOW player's adjusted season average.
+→ Prefer to exclude Tier 1 games entirely unless the alt-line pick is extremely clean.
+
+TIER 2 — CAUTION (70–85% win prob):
+→ Points props only if threshold is ≥15% below adjusted average.
+→ Prefer rebounds/assists/defensive stats.
+→ Alt lines strongly preferred.
+
+TIER 3 — PREFERRED (<70% win prob):
+→ All prop types eligible. These are PRIORITY games for parlay legs.
+
+════════════════════════════════════════
+STEP 2 — BACK-TO-BACK & FATIGUE ADJUSTMENTS
+════════════════════════════════════════
+Apply ALL that apply (stack adjustments):
+• Player on B2B, same timezone: threshold -5% from adjusted base
+• Player on B2B, coast-to-coast (westward travel most disruptive): threshold -10% OR exclude entirely
+• Player in 3rd game of 3-in-4 nights: threshold -10% OR exclude
+• Opponent on B2B: +5% confidence boost (their defense is compromised)
+• Cross-apply: If the targeted player is on the RESTED team facing a B2B team, that's a significant edge.
+
+════════════════════════════════════════
+STEP 3 — INJURY FILTERING (ZERO TOLERANCE)
+════════════════════════════════════════
+• OUT → EXCLUDED. Always.
+• QUESTIONABLE → EXCLUDED. Always.
+• PROBABLE + soft tissue injury (hamstring/quad/calf/groin/hip) + NO confirmed full practice → EXCLUDED.
+• PROBABLE + minute restriction reported → EXCLUDED.
+• PROBABLE + locked-in team + late March → HIGH RISK. Exclude unless star has confirmed no rest plan.
+• Returning from injury → teammate usage DECREASES. Adjust all affected teammates down.
+• Key teammate OUT → usage INCREASES. Positive factor, but verify DK line hasn't already adjusted.
+
+════════════════════════════════════════
+STEP 4 — PACE ANALYSIS
+════════════════════════════════════════
+• Pace-up game (both teams >102, or significant mismatch): Points/assists overs get +5% confidence. ✅
+• Pace-down game (both teams <98): Avoid points overs OR reduce threshold -5%.
+• Very slow game (<96 combined avg): Strong headwind for any over prop. Avoid.
+
+════════════════════════════════════════
+STEP 5 — POSITION-SPECIFIC DEFENSIVE MATCHUP
+════════════════════════════════════════
+• Must use POSITION-SPECIFIC defensive data, not just overall team DRtg.
+• Top-5 defense at player's position: Reduce threshold -10% OR exclude.
+• Bottom-10 defense at player's position: +8% confidence boost. Target these. ✅
+• Average/middle defense: Use standard threshold.
+• If position-specific data unavailable: Use overall DRtg with cautious adjustment.
+
+════════════════════════════════════════
+STEP 6 — HOME / AWAY ADJUSTMENT
+════════════════════════════════════════
+• Road game for player: Base threshold -3% for points props.
+• Check player's specific home/away split. If gap >4 points: apply the exact split, not just -3%.
+• Home game preferred for points props when choosing between equal candidates.
+
+════════════════════════════════════════
+STEP 7 — DENVER ALTITUDE ADJUSTMENT
+════════════════════════════════════════
+• Game at Ball Arena, Denver: Visiting team players get threshold -4% for any prop.
+• Visiting players' 4th quarter production especially compromised. Points props particularly risky.
+• Nuggets home players at altitude: Standard or slight advantage. No adjustment needed.
+• This adjustment is MANDATORY for any Denver home game involving visiting player props.
+
+════════════════════════════════════════
+STEP 8 — USAGE RATE & MINUTES PROJECTION
+════════════════════════════════════════
+• Season usage rate declining >3% in last 10 games vs full season: Flag as concern, threshold -5%.
+• Inconsistent minutes recently (swing of 8+ min game-to-game): Flag as concern.
+• Late season + team locked into seeding: EXCLUDE star (rest risk).
+• Suspected load management with no official designation: EXCLUDE.
+• Key teammate out → usage up: Verify DK line hasn't fully priced this in. May be an edge.
+
+════════════════════════════════════════
+STEP 9 — VOLATILITY & CONSISTENCY CHECK
+════════════════════════════════════════
+• HIGH VOLATILITY (max-min spread >15 in last 15 games): Risky. Only include if threshold is 20%+ below adjusted average.
+• LOW VOLATILITY (max-min spread <8, consistently within 4 of average): Strong parlay candidate. ✅
+• OUTLIER GAME RULE: Player scored 10+ above season average in either of last 2 games? EXCLUDE. Regression to the mean is the highest-probability outcome. The DK line will be elevated. The public will be chasing. This is a trap.
+
+════════════════════════════════════════
+STEP 10 — TEAMMATE SPLITS (EXACT NUMBERS)
+════════════════════════════════════════
+• Must use actual game log data, not estimates.
+• If key teammate is OUT tonight: Player's avg WITH that teammate vs WITHOUT. Apply the exact differential.
+• If key teammate is RETURNING: Usage redistributes. Apply reduction proportionally.
+• If DK line already reflects the teammate situation: No additional edge, standard threshold.
+
+════════════════════════════════════════
+STEP 11 — LINE MOVEMENT SIGNAL
+════════════════════════════════════════
+• Line moved in our direction (e.g., rebounds 10.5→11.5 and we want over 10.5): Sharp money signal ✅ Boosts confidence.
+• Line moved against our direction: ⚠️ Warning. Reconsider. If no other explanation: EXCLUDE.
+• No movement data: Proceed cautiously, note as unconfirmed.
+• Heavy public on the over (star player, nationally recognized): Under may have better true value. Consider if appropriate.
+
+════════════════════════════════════════
+STEP 12 — SEASON STAGE & MOTIVATION
+════════════════════════════════════════
+• Team locked into seeding (late March): Star player props at HIGH risk → EXCLUDE.
+• Team fighting for playoff spot: Stars play maximum minutes, maximum effort → POSITIVE ✅
+• Team eliminated or tanking: Unpredictable rotations, possible rest → EXCLUDE player props.
+• Rivalry / nationally televised: Stars play extra hard → slight +3% threshold boost.
+• 3+ game winning streak for that player's team: Positive momentum → slight edge.
+
+════════════════════════════════════════
+STEP 13 — TRAP DETECTION (PERMANENTLY BANNED PROP TYPES)
+════════════════════════════════════════
+These categories are AUTOMATICALLY EXCLUDED regardless of any other factors:
+❌ Made 3-pointers (brick variance too high, completely random)
+❌ Double-double props (requires two separate stats to both hit)
+❌ Assist-only props for non-primary playmakers (too team-dependent)
+❌ First basket props (pure randomness)
+❌ Points props in Tier 1 blowout games (>85% win prob / spread >14)
+❌ Any player listed OUT or QUESTIONABLE
+❌ Soft tissue injury "probable" without confirmed full practice
+❌ Post-outlier-game picks (10+ above average in last 2 games = regression trap)
+❌ Stars on locked-in seeding teams in late March
+❌ Usage rate declining >3% without explanation
+❌ Correlated legs from same game (even different players on same team = avoid)
+❌ DK line ABOVE our calculated threshold (even by 0.5)
+❌ Any prop where the main risk scenario cannot be adequately mitigated
+
+════════════════════════════════════════
+STEP 14 — REFEREE CREW CHECK
+════════════════════════════════════════
+• High-foul refs: Positive for players who draw fouls (aggressive drivers, physical bigs)
+• Low-foul refs: Negative for players dependent on free throws; games may also be more physical
+• If ref known for early star fouls: Flag as risk for any prop dependent on 34+ minutes
+• If data unavailable: Note "ref data unavailable" and proceed with standard confidence
+
+════════════════════════════════════════
+STEP 15 — THRESHOLD CALCULATION (SHOW YOUR MATH)
+════════════════════════════════════════
+For each surviving candidate, calculate the exact threshold:
+
+START: Player's season average for the specific stat
+
+APPLY STACKED ADJUSTMENTS:
+Deductions:
+  -3%  Road game (points)
+  -5%  B2B, same timezone
+  -10% B2B, coast-to-coast
+  -10% 3-in-4 night stretch
+  -10% Top-5 position defense
+  -4%  Denver altitude (visiting player)
+  -5%  Usage declining >3%
+  -5%  Slow game pace
+  -10% Buffer for high-volatility player
+
+Boosts:
+  +5%  Pace-up game
+  +8%  Bottom-10 position defense
+  +5%  Opponent on B2B
+  +3%  Playoff motivation / rivalry
+  +4%  Key teammate OUT (usage increase)
+
+FINAL ADJUSTED THRESHOLD = season average with all adjustments applied
+
+GATE: DraftKings line must be AT or BELOW final threshold.
+If DK line is even 0.5 above threshold → EXCLUDE THIS PROP.
+We always want the DK line under our threshold, not at it.
+
+════════════════════════════════════════
+STEP 16 — FINAL BUILD & STRESS TEST
+════════════════════════════════════════
+From all candidates who passed ALL 15 prior steps:
+
+STRESS TEST each leg:
+  Q1: "What is the single most likely way this prop fails tonight?"
+  Q2: "Am I including this because I WANT it to work, or because the data demands it?"
+  Q3: "If I had to bet AGAINST this prop, what would be my argument?"
+→ If Q1 or Q3 reveals a significant unmitigated risk: EXCLUDE. No exceptions.
+
+PARLAY CONSTRUCTION:
+• 3 legs: Standard. Preferred.
+• 2 legs: Only if a clean 3rd leg cannot be found after exhausting all options.
+• 4+ legs: NEVER. Hard cap.
+• All legs: Different games. No correlation.
+• Min confidence: 68% per leg after all adjustments.
+
+IF NO CLEAN PARLAY EXISTS:
+→ Output NO_PARLAY
+→ Explain exactly what came closest and which step eliminated it
+→ This is the CORRECT and DISCIPLINED call. Never force picks.
+
+════════════════════════════════════════
+STRICT OUTPUT FORMAT — FOLLOW EXACTLY
+════════════════════════════════════════
+
+First line:
+SLATE: [TODAY/TOMORROW] — [Day, Month Date, Year]
+
+Then either:
+
+---PARLAY_START---
+LEG_1: [Player Name] | [Stat] [Number]+ | [Away @ Home] | Confidence: [X%] | Est DK odds: [odds]
+LEG_2: [Player Name] | [Stat] [Number]+ | [Away @ Home] | Confidence: [X%] | Est DK odds: [odds]
+LEG_3: [Player Name] | [Stat] [Number]+ | [Away @ Home] | Confidence: [X%] | Est DK odds: [odds]
+PAYOUT: ~$[amount] on $25 stake
+---PARLAY_END---
+
+Then FULL ANALYSIS section:
+
+ANALYSIS:
+**WHY LEG 1 PASSES:**
+[Cover every applicable step. Show threshold math: Season avg X → Applied adjustments → Final threshold Y → DK line Z ✅. Stress test answer. Why this leg is clean.]
+
+**WHY LEG 2 PASSES:**
+[Same format]
+
+**WHY LEG 3 PASSES:**
+[Same format]
+
+**STRONGEST STANDALONE LEG:**
+[Best single leg if betting only one pick straight]
+
+**PRE-LOCK WATCHLIST:**
+[Items to verify between now and tip-off. Late injury news to monitor. Line movement to watch.]
+
+**ELIMINATED CANDIDATES:**
+[Player Name — Prop — Step that eliminated them — One sentence why]
+
+Or if no clean parlay:
+NO_PARLAY: [Detailed explanation of closest candidates and which step eliminated them. What to look for tomorrow.]`;
+
+// ═══════════════════════════════════════════════════════════════
+//  API CALL
+// ═══════════════════════════════════════════════════════════════
+
+async function callClaude(systemPrompt, userMessage, maxTokens = 4000) {
+  const payload = {
+    model: 'claude-sonnet-4-20250514',
+    system: systemPrompt,
+    max_tokens: maxTokens,
+    messages: [{ role: 'user', content: userMessage }]
+  };
+
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errText = await response.text().catch(() => 'Unknown error');
+    throw new Error(`API ${response.status}: ${errText.substring(0, 200)}`);
   }
-  localStorage.setItem('xt',JSON.stringify(S.t));
-}
 
-async function sbSyncBets(){
-  for(const b of S.b){
-    if(!b.sbId){
-      const r=await sbFetch('bets','POST',{description:b.d,stake:b.s,result:b.r,payout:b.p,lesson:b.l||'',auto_generated:b.auto||false,date_label:b.date||''});
-      if(r&&r[0])b.sbId=r[0].id;
-    }else{
-      await sbFetch('bets?id=eq.'+b.sbId,'PATCH',{result:b.r,payout:b.p,lesson:b.l||''});
-    }
+  const data = await response.json();
+
+  // Handle nested response formats from the backend
+  if (data.content && Array.isArray(data.content)) {
+    return data.content
+      .filter(c => c.type === 'text')
+      .map(c => c.text)
+      .join('\n');
   }
-  localStorage.setItem('xb',JSON.stringify(S.b));
+  if (typeof data.message === 'string') return data.message;
+  if (typeof data.response === 'string') return data.response;
+  if (typeof data.text === 'string') return data.text;
+  if (typeof data === 'string') return data;
+
+  // Fallback: stringify
+  return JSON.stringify(data);
 }
 
-async function sbLoadAll(){
-  try{
-    // Load tasks
-    const tasks=await sbFetch('tasks?order=created_at.asc');
-    if(tasks&&Array.isArray(tasks)&&tasks.length>0){
-      S.t=tasks.map(t=>({t:t.text,d:t.done,sbId:t.id}));
-      localStorage.setItem('xt',JSON.stringify(S.t));rT();
+// ═══════════════════════════════════════════════════════════════
+//  GENERATE PARLAY — MAIN FLOW
+// ═══════════════════════════════════════════════════════════════
+
+let isGenerating = false;
+let currentGenerated = null;
+
+async function generateParlay() {
+  if (isGenerating) return;
+  isGenerating = true;
+
+  const btn = document.getElementById('generateBtn');
+  const pw = document.getElementById('progressWrap');
+  const out = document.getElementById('outputArea');
+
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Researching...';
+  pw.style.display = 'block';
+  out.innerHTML = '';
+
+  // Current time in CT
+  const ctTime = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: true
+  }).format(new Date());
+
+  document.getElementById('slateLabel').textContent = `Researching... ${ctTime} CT`;
+
+  let scheduleData = '', injuryData = '', statsData = '', contextData = '', finalOutput = '';
+
+  try {
+    // ── STEP 1: SCHEDULE ──────────────────────────────────────
+    setProgress(1, 'active', 8, '📅 Scouting NBA schedule, win probabilities, B2B & altitude flags...');
+    scheduleData = await callClaude(
+      PROMPT_SCHEDULE,
+      `Current Central Time: ${ctTime}\n\nSearch for today's and tomorrow's NBA schedule. Determine which slate to analyze based on the time rule. Gather all game data, win probabilities, spreads, B2B status, Denver altitude games, and team playoff situations. Be thorough — this is the foundation for everything.`
+    );
+    setProgress(1, 'done', 22, '🏥 Scanning injury reports and beat reporter intel...');
+
+    // ── STEP 2: INJURIES ─────────────────────────────────────
+    setProgress(2, 'active', 22, '🏥 Checking official reports, beat reporters, minute restrictions...');
+    injuryData = await callClaude(
+      PROMPT_INJURY,
+      `Slate data:\n\n${scheduleData}\n\nCurrent time: ${ctTime}\n\nNow research injury status for ALL key players on this slate. Check official NBA injury report AND beat reporters for late-breaking news. Identify minute restrictions, soft tissue injuries, load management risks, and any players returning from injury.`
+    );
+    setProgress(2, 'done', 42, '📊 Pulling pace, defensive ratings, usage rates, volatility...');
+
+    // ── STEP 3: STATS ─────────────────────────────────────────
+    setProgress(3, 'active', 42, '📊 Gathering pace, DRtg, usage rates, home/away splits, line movement...');
+    statsData = await callClaude(
+      PROMPT_STATS,
+      `Schedule:\n${scheduleData}\n\nInjuries:\n${injuryData}\n\nCurrent time: ${ctTime}\n\nNow gather deep statistical data for all healthy/available key players. Pace for both teams in each game. Position-specific defensive ratings. Player season/L10/L5 averages. Home/away splits. Usage rates. Volatility assessment. Outlier game detection. Teammate splits. DraftKings lines. Line movement if available. Referee crew. Coaching tendencies. Denver altitude context if applicable.`,
+      5000
+    );
+    setProgress(3, 'done', 62, '🔬 Running devil\'s advocate analysis and regression checks...');
+
+    // ── STEP 4: CONTEXT ───────────────────────────────────────
+    setProgress(4, 'active', 62, '🔬 Regression analysis, confirmation bias check, season stage urgency...');
+    contextData = await callClaude(
+      PROMPT_CONTEXT,
+      `Schedule:\n${scheduleData}\n\nInjuries:\n${injuryData}\n\nStats:\n${statsData}\n\nCurrent time: ${ctTime}\n\nNow run the advanced context analysis: regression-to-mean scan, devil's advocate check for each surviving candidate, sample size validation, season stage urgency analysis, public betting bias identification, and produce a ranked final candidate list.`,
+      4000
+    );
+    setProgress(4, 'done', 80, '🎯 Applying 16-step methodology, building final parlay...');
+
+    // ── STEP 5: BUILD ─────────────────────────────────────────
+    setProgress(5, 'active', 82, '🎯 Stress testing every leg. Enforcing all 16 rules. No shortcuts...');
+    finalOutput = await callClaude(
+      PROMPT_BUILD,
+      `=== LAYER 1: SCHEDULE & CONTEXT ===\n${scheduleData}\n\n=== LAYER 2: INJURY DATA ===\n${injuryData}\n\n=== LAYER 3: STATS & LINE DATA ===\n${statsData}\n\n=== LAYER 4: ADVANCED CONTEXT & CANDIDATE LIST ===\n${contextData}\n\n=== CURRENT TIME ===\n${ctTime}\n\nApply the full 16-step methodology to this data. Be absolutely strict. Show threshold math for each leg. Run the stress test. If nothing passes all 16 steps cleanly, output NO_PARLAY. This is DraftKings, $25 stake, NBA only.`,
+      6000
+    );
+    setProgress(5, 'done', 100, '✅ Complete — rendering results...');
+
+    await sleep(400);
+    pw.style.display = 'none';
+    renderOutput(finalOutput, { scheduleData, injuryData, statsData, contextData, timestamp: ctTime });
+
+  } catch (err) {
+    console.error('Engine error:', err);
+    pw.style.display = 'none';
+    out.innerHTML = `
+      <div class="parlay-card" style="border-color:#fecaca;">
+        <div class="card-body">
+          <div style="color:var(--red);font-family:var(--font-main);font-weight:700;font-size:15px;margin-bottom:8px;">⚠️ Engine Error</div>
+          <div style="font-size:12px;color:var(--gray-600);font-family:var(--font-mono);margin-bottom:6px;">${escHtml(err.message)}</div>
+          <div style="font-size:11px;color:var(--gray-400);">Make sure the Xylix OS backend is running at ${API_URL} and the /api/claude route supports the system parameter.</div>
+        </div>
+      </div>`;
+  } finally {
+    isGenerating = false;
+    btn.disabled = false;
+    btn.innerHTML = '🔍 Generate Today\'s Parlay';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PROGRESS
+// ═══════════════════════════════════════════════════════════════
+
+function setProgress(stepNum, state, fillPct, text) {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById(`sp${i}`);
+    if (!el) continue;
+    el.className = 'step-pill' + (i < stepNum ? ' done' : i === stepNum ? ` ${state}` : '');
+  }
+  document.getElementById('progressFill').style.width = `${fillPct}%`;
+  document.getElementById('progressText').textContent = text;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RENDER OUTPUT
+// ═══════════════════════════════════════════════════════════════
+
+function renderOutput(raw, researchData) {
+  const out = document.getElementById('outputArea');
+  out.innerHTML = '';
+
+  // Update slate label
+  const slateM = raw.match(/SLATE[:\s]+([^\n]+)/i);
+  if (slateM) document.getElementById('slateLabel').textContent = slateM[1].trim();
+
+  // ── NO PARLAY ─────────────────────────────────────────────
+  const isNoParlay = /NO_PARLAY|NO CLEAN PARLAY/i.test(raw);
+  if (isNoParlay) {
+    const noReason = raw.replace(/.*?NO[_\s]PARLAY[:\s]*/is, '').trim().substring(0, 1200);
+    out.innerHTML = `
+      <div class="no-parlay-card">
+        <h3>❌ No Clean Parlay Today</h3>
+        <p>${fmtText(noReason)}</p>
+      </div>`;
+    out.innerHTML += buildResearch(researchData);
+    return;
+  }
+
+  // ── PARSE LEGS ────────────────────────────────────────────
+  const legs = parseLegs(raw);
+  const payoutM = raw.match(/PAYOUT[:\s]*~?\$?([\d,.]+)/i);
+  const payout = payoutM ? payoutM[1] : '?';
+
+  if (legs.length === 0) {
+    out.innerHTML = `
+      <div class="parlay-card">
+        <div class="card-body">
+          <div style="font-family:var(--font-main);font-size:14px;color:var(--gray-600);margin-bottom:12px;">📋 Engine Output (could not auto-parse legs — review below)</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--gray-700);white-space:pre-wrap;line-height:1.7;max-height:400px;overflow-y:auto;">${escHtml(raw.substring(0, 3000))}</div>
+        </div>
+      </div>`;
+    out.innerHTML += buildResearch(researchData);
+    return;
+  }
+
+  // ── PARLAY CARD ───────────────────────────────────────────
+  let legsHtml = legs.map((leg, i) => {
+    const conf = parseFloat(leg.confidence);
+    const confClass = conf >= 80 ? '' : conf >= 70 ? 'med' : 'low';
+    return `
+      <div class="leg-item">
+        <div class="leg-left">
+          <div class="leg-num">LEG ${i + 1}</div>
+          <div class="leg-player">${escHtml(leg.player)}</div>
+          <div class="leg-prop">${escHtml(leg.prop)}</div>
+          <div class="leg-game">${escHtml(leg.game)}</div>
+        </div>
+        <div class="leg-right">
+          <div class="leg-conf ${confClass}">${escHtml(leg.confidence)}</div>
+          ${leg.odds ? `<div class="leg-odds">${escHtml(leg.odds)}</div>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  out.innerHTML += `
+    <div class="parlay-card">
+      <div class="card-header">
+        <div class="card-title">✅ Recommended Parlay — ${legs.length} Legs</div>
+        <span class="status-badge status-pending">⏳ Pending</span>
+      </div>
+      <div class="card-body">
+        ${legsHtml}
+        <div class="payout-row">
+          <div class="payout-label">Estimated Payout on $25</div>
+          <div class="payout-amount">~$${escHtml(payout)}</div>
+        </div>
+      </div>
+    </div>`;
+
+  // ── CLV TRACKER ───────────────────────────────────────────
+  let clvLegsHtml = legs.map((leg, i) => `
+    <div class="clv-field">
+      <label>Leg ${i + 1} Line at Bet vs Close</label>
+      <input class="clv-input" id="clv_${i}" placeholder="e.g. 10.5 → 11.5" oninput="checkCLV()">
+    </div>`).join('');
+
+  out.innerHTML += `
+    <div class="clv-widget">
+      <div class="clv-title">📈 Closing Line Value Tracker</div>
+      <div style="font-size:11px;color:var(--purple);margin-bottom:10px;line-height:1.5;">Beating the closing line = genuine edge. Enter what line you got vs where it closed at tip.</div>
+      <div class="clv-row">${clvLegsHtml}</div>
+      <div class="clv-result" id="clvResult"></div>
+    </div>`;
+
+  // ── STANDALONE CARD ───────────────────────────────────────
+  const standalone = extractBetween(raw, 'STRONGEST STANDALONE LEG', 'PRE-LOCK WATCHLIST');
+  if (standalone && standalone.trim().length > 5) {
+    out.innerHTML += `
+      <div class="standalone-card">
+        <div class="standalone-header">
+          <span>💚 Strongest Standalone Leg</span>
+        </div>
+        <div class="card-body" style="font-size:13px;color:var(--gray-700);line-height:1.7;">${fmtText(standalone.trim())}</div>
+      </div>`;
+  }
+
+  // ── FULL ANALYSIS ─────────────────────────────────────────
+  const analysis = extractBetween(raw, 'ANALYSIS:', 'STRONGEST STANDALONE LEG') || extractBetween(raw, 'ANALYSIS:', null);
+  if (analysis && analysis.length > 20) {
+    const legSections = splitLegAnalysis(analysis, legs.length);
+    let accordionHtml = legSections.map((sec, i) => `
+      <div class="analysis-leg">
+        <div class="analysis-leg-header" onclick="toggleAccordion(this)">
+          <span>📋 Why Leg ${i + 1} Passes — ${legs[i] ? legs[i].player : ''}</span>
+          <span>▼</span>
+        </div>
+        <div class="analysis-leg-body">${escHtml(sec.trim())}</div>
+      </div>`).join('');
+
+    out.innerHTML += `
+      <div class="research-section">
+        <button class="research-toggle" onclick="toggleResearch(this)">
+          📋 Full 16-Step Analysis ▼
+        </button>
+        <div class="research-body">
+          ${accordionHtml}
+        </div>
+      </div>`;
+  }
+
+  // ── PRE-LOCK WATCHLIST ────────────────────────────────────
+  const watchlist = extractBetween(raw, 'PRE-LOCK WATCHLIST', 'ELIMINATED CANDIDATES');
+  if (watchlist && watchlist.trim().length > 10) {
+    const items = watchlist.split('\n').filter(l => l.trim().replace(/[-•*]/g, '').trim().length > 5);
+    let watchHtml = items.slice(0, 8).map(item => `
+      <div class="watch-item">
+        <div class="watch-icon">⚠️</div>
+        <div>${fmtText(item.replace(/^[-•*⚠️\s]+/, '').trim())}</div>
+      </div>`).join('');
+    out.innerHTML += `
+      <div class="parlay-card">
+        <div class="card-header">
+          <div class="card-title">⚠️ Pre-Lock Watchlist</div>
+        </div>
+        <div class="card-body">${watchHtml}</div>
+      </div>`;
+  }
+
+  // ── ELIMINATED ────────────────────────────────────────────
+  const eliminated = extractBetween(raw, 'ELIMINATED CANDIDATES', null);
+  if (eliminated && eliminated.trim().length > 10) {
+    const items = eliminated.split('\n').filter(l => l.trim().replace(/[-•*]/g, '').trim().length > 5);
+    let elimHtml = items.slice(0, 12).map(item => {
+      const clean = item.replace(/^[-•*\s]+/, '').trim();
+      return `<div class="elim-item"><span class="elim-tag">EXCLUDED</span><span>${escHtml(clean)}</span></div>`;
+    }).join('');
+    out.innerHTML += `
+      <div class="parlay-card">
+        <div class="card-header">
+          <div class="card-title">🚫 Eliminated Candidates</div>
+        </div>
+        <div class="card-body">${elimHtml}</div>
+      </div>`;
+  }
+
+  // ── RESEARCH DATA ─────────────────────────────────────────
+  out.innerHTML += buildResearch(researchData);
+
+  // ── AUTO-LOG ──────────────────────────────────────────────
+  if (legs.length >= 2) {
+    const entry = {
+      id: Date.now(),
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      legs: legs.map(l => `${l.player} ${l.prop}`).join(' | '),
+      stake: '$25',
+      payout: `~$${payout}`,
+      status: 'pending',
+      missReason: '',
+      clv: '',
+      rawOutput: raw.substring(0, 4000)
+    };
+    currentGenerated = entry;
+    saveEntry(entry);
+    renderTable();
+    updateStats();
+    document.getElementById('resultsBtn').disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CLV CHECK
+// ═══════════════════════════════════════════════════════════════
+
+function checkCLV() {
+  const result = document.getElementById('clvResult');
+  const entries = [];
+  let i = 0;
+  while (document.getElementById(`clv_${i}`)) {
+    const val = document.getElementById(`clv_${i}`).value.trim();
+    if (val) entries.push(val);
+    i++;
+  }
+  if (entries.length === 0) { result.style.display = 'none'; return; }
+
+  // Parse "10.5 → 11.5" style entries
+  let beatingCount = 0;
+  entries.forEach(e => {
+    const parts = e.replace(/→|->|to/i, '|').split('|').map(x => parseFloat(x.trim()));
+    if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+      if (parts[1] > parts[0]) beatingCount++; // line moved up = we beat closing (for overs)
     }
-    // Load bets
-    const bets=await sbFetch('bets?order=created_at.asc');
-    if(bets&&Array.isArray(bets)&&bets.length>0){
-      S.b=bets.map(b=>({d:b.description,s:b.stake,r:b.result,p:b.payout,l:b.lesson,auto:b.auto_generated,date:b.date_label,sbId:b.id}));
-      localStorage.setItem('xb',JSON.stringify(S.b));rB();
-    }
-    // Load characters
-    const chars=await sbFetch('characters?order=created_at.asc');
-    if(chars&&Array.isArray(chars)&&chars.length>0){
-      S.c=chars.map(c=>({n:c.name,v:c.vibe,s:c.style,i:c.images||[],sbId:c.id}));
-      localStorage.setItem('xc',JSON.stringify(S.c));rC();
-    }
-    // Load API keys
-    const keys=await sbFetch('settings');
-    if(keys&&Array.isArray(keys)){
-      keys.forEach(k=>{
-        if(k.key_name==='anthropic')localStorage.setItem('xk_a',k.key_value);
-        if(k.key_name==='fal')localStorage.setItem('xk_f',k.key_value);
-        if(k.key_name==='elevenlabs')localStorage.setItem('xk_e',k.key_value);
-        if(k.key_name==='model')localStorage.setItem('xk_m',k.key_value);
+  });
+
+  result.style.display = 'block';
+  if (beatingCount === entries.length) {
+    result.className = 'clv-result clv-beat';
+    result.textContent = `✅ Beat closing line on all ${entries.length} legs — genuine edge confirmed`;
+  } else if (beatingCount > 0) {
+    result.className = 'clv-result clv-beat';
+    result.textContent = `📈 Beat closing line on ${beatingCount}/${entries.length} legs`;
+  } else {
+    result.className = 'clv-result clv-lost';
+    result.textContent = `⚠️ Did not beat closing line — review methodology for future picks`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PARSE HELPERS
+// ═══════════════════════════════════════════════════════════════
+
+function parseLegs(text) {
+  const legs = [];
+  const block = text.match(/---PARLAY_START---([\s\S]*?)---PARLAY_END---/i);
+  const src = block ? block[1] : text;
+
+  // Primary pattern: LEG_1: Player | Prop | Game | Confidence: X% | Est DK odds: Y
+  const re = /LEG[_\s](\d)[:\s]+([^|]+)\|([^|]+)\|([^|]+)\|[^C]*Confidence[:\s]*([\d.]+%?)(?:[^|]*\|[^:]*DK odds[:\s]*([^\n]+))?/gi;
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    legs.push({
+      num: m[1],
+      player: m[2].trim(),
+      prop: m[3].trim(),
+      game: m[4].trim(),
+      confidence: m[5].trim().replace('%', '') + '%',
+      odds: (m[6] || '').trim()
+    });
+  }
+
+  // Fallback: simple line-by-line
+  if (legs.length === 0) {
+    src.split('\n').forEach(line => {
+      const lm = line.match(/^LEG[_\s]?(\d)[:\s]+(.+)/i);
+      if (!lm) return;
+      const parts = lm[2].split('|').map(p => p.trim());
+      const confStr = parts.find(p => /\d+%/.test(p)) || '75%';
+      const conf = (confStr.match(/(\d+)%/) || ['', '75'])[1] + '%';
+      legs.push({
+        num: lm[1],
+        player: parts[0] || 'Player',
+        prop: parts[1] || '',
+        game: parts[2] || '',
+        confidence: conf,
+        odds: ''
       });
-      lK();
-    }
-  }catch(e){console.log('Supabase load error:',e)}
+    });
+  }
+
+  return legs.slice(0, 3);
 }
 
-async function sbClear(){
-  await sbFetch('tasks','DELETE');await sbFetch('bets','DELETE');
-  await sbFetch('characters','DELETE');await sbFetch('settings','DELETE');
+function extractBetween(text, start, end) {
+  const si = text.indexOf(start);
+  if (si === -1) return '';
+  const after = text.substring(si + start.length);
+  if (!end) return after;
+  const ei = after.indexOf(end);
+  return ei === -1 ? after : after.substring(0, ei);
 }
 
-// Override save functions to also sync to Supabase
-const origSK=sK;
-sK=function(){origSK();
-  const keys=[{key_name:'anthropic',key_value:gk('a')},{key_name:'fal',key_value:gk('f')},{key_name:'elevenlabs',key_value:gk('e')},{key_name:'model',key_value:localStorage.getItem('xk_m')||''}];
-  keys.forEach(async k=>{if(k.key_value)await sbFetch('settings','POST',{...k}).catch(()=>sbFetch('settings?key_name=eq.'+k.key_name,'PATCH',{key_value:k.key_value}))});
+function splitLegAnalysis(analysis, legCount) {
+  const sections = [];
+  for (let i = 1; i <= legCount; i++) {
+    const marker = `**WHY LEG ${i} PASSES:**`;
+    const nextMarker = `**WHY LEG ${i + 1} PASSES:**`;
+    const si = analysis.indexOf(marker);
+    if (si === -1) continue;
+    const after = analysis.substring(si + marker.length);
+    const ei = after.indexOf(nextMarker);
+    sections.push(ei === -1 ? after : after.substring(0, ei));
+  }
+  return sections;
 }
 
-// INIT
-(function(){
-  document.getElementById('dd').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  lK();rT();rC();rB();
-  // Load from Supabase (async, overwrites localStorage if data exists)
-  sbLoadAll();
-})();
+function buildResearch(data) {
+  if (!data) return '';
+  const truncate = (str, n) => (str || '').substring(0, n) + ((str || '').length > n ? '...' : '');
+  return `
+    <div class="research-section">
+      <button class="research-toggle" onclick="toggleResearch(this)">
+        🔬 Raw Research Data (4 Layers) ▼
+      </button>
+      <div class="research-body">
+        <div class="research-subsection-title">📅 Layer 1 — Schedule & Context</div>
+        <div class="research-content">${escHtml(truncate(data.scheduleData, 2000))}</div>
+        <div class="research-subsection-title">🏥 Layer 2 — Injuries & Availability</div>
+        <div class="research-content">${escHtml(truncate(data.injuryData, 2000))}</div>
+        <div class="research-subsection-title">📊 Layer 3 — Stats, Pace & Lines</div>
+        <div class="research-content">${escHtml(truncate(data.statsData, 2500))}</div>
+        <div class="research-subsection-title">🔬 Layer 4 — Advanced Context</div>
+        <div class="research-content">${escHtml(truncate(data.contextData, 2000))}</div>
+        <div style="font-size:10px;color:var(--gray-400);margin-top:10px;font-family:var(--font-mono);">Generated: ${escHtml(data.timestamp || '')}</div>
+      </div>
+    </div>`;
+}
+
+function fmtText(t) {
+  if (!t) return '';
+  return escHtml(t)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+function escHtml(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function toggleResearch(btn) {
+  const body = btn.nextElementSibling;
+  const open = body.classList.toggle('open');
+  btn.textContent = btn.textContent.replace(open ? '▼' : '▲', open ? '▲' : '▼');
+}
+
+function toggleAccordion(header) {
+  const body = header.nextElementSibling;
+  const open = body.classList.toggle('open');
+  header.querySelector('span:last-child').textContent = open ? '▲' : '▼';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RESULTS CHECKER
+// ═══════════════════════════════════════════════════════════════
+
+function toggleResults() {
+  const sec = document.getElementById('resultsSection');
+  const showing = sec.classList.contains('show');
+  if (showing) { sec.classList.remove('show'); return; }
+
+  const pending = getPending();
+  if (pending.length === 0) {
+    sec.innerHTML = `<div class="card-body" style="text-align:center;color:var(--gray-400);font-size:13px;padding:28px;">No pending parlays to check.</div>`;
+    sec.classList.add('show');
+    return;
+  }
+
+  let html = `
+    <div class="card-header">
+      <div class="card-title">📊 Check Results — ${pending.length} Pending</div>
+    </div>
+    <div class="card-body">`;
+
+  pending.forEach(p => {
+    const legArr = p.legs.split(' | ');
+    const legRows = legArr.map((l, i) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--gray-100);flex-wrap:wrap;">
+        <span style="flex:1;font-size:12px;color:var(--gray-700);min-width:140px;">${escHtml(l)}</span>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          ${['hit','miss','push'].map(v => `
+            <label style="display:flex;align-items:center;gap:3px;font-size:11px;cursor:pointer;font-family:var(--font-main);">
+              <input type="radio" name="leg_${p.id}_${i}" value="${v}" style="accent-color:${v==='hit'?'var(--green)':v==='miss'?'var(--red)':'var(--blue)'};">
+              ${v.charAt(0).toUpperCase()+v.slice(1)}
+            </label>`).join('')}
+        </div>
+      </div>`).join('');
+
+    html += `
+      <div style="background:var(--gray-50);border-radius:9px;padding:14px;margin-bottom:12px;">
+        <div style="font-family:var(--font-main);font-size:12px;font-weight:700;color:var(--gray-600);margin-bottom:10px;">${escHtml(p.date)}</div>
+        ${legRows}
+        <div style="margin-top:10px;">
+          <label style="font-size:11px;font-weight:600;color:var(--gray-600);font-family:var(--font-main);display:block;margin-bottom:4px;">Miss Reason (if any):</label>
+          <select id="miss_${p.id}" style="width:100%;padding:7px 10px;border:1px solid var(--gray-200);border-radius:6px;font-size:12px;color:var(--gray-700);font-family:var(--font-body);background:white;">
+            <option value="">— Select if applicable —</option>
+            <option value="BLOWOUT_REST">Blowout / garbage time rest</option>
+            <option value="INJURY_IMPACT">Injury / minute restriction</option>
+            <option value="MATCHUP">Defensive matchup stronger than expected</option>
+            <option value="BLOWOUT_WRONG_TEAM">Wrong team was the blowout</option>
+            <option value="B2B_FATIGUE">B2B fatigue underestimated</option>
+            <option value="OUTLIER_REGRESSION">Post-outlier regression (shoulda excluded)</option>
+            <option value="LINE_TOO_HIGH">Line was set too high / public-inflated</option>
+            <option value="TRAP_VIOLATION">Was actually a trap we should have caught</option>
+            <option value="PURE_VARIANCE">Clean pick, just variance</option>
+            <option value="COACHING_ROTATION">Coach pulled star early</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button class="btn btn-green" style="flex:1;font-size:12px;padding:9px;" onclick="submitResult('${p.id}')">✅ Submit</button>
+          <button class="btn btn-secondary" style="font-size:12px;padding:9px;" onclick="autoAnalyze('${p.id}')">🔬 Auto-Analyze</button>
+        </div>
+        <div id="analyzeResult_${p.id}" style="margin-top:10px;display:none;"></div>
+      </div>`;
+  });
+
+  html += `</div>`;
+  sec.innerHTML = html;
+  sec.classList.add('show');
+}
+
+function submitResult(parlayId) {
+  const all = getAll();
+  const p = all.find(x => String(x.id) === String(parlayId));
+  if (!p) return;
+
+  const legArr = p.legs.split(' | ');
+  let allHit = true;
+  let anyMiss = false;
+
+  for (let i = 0; i < legArr.length; i++) {
+    const sel = document.querySelector(`input[name="leg_${parlayId}_${i}"]:checked`);
+    if (!sel) { alert('Please mark every leg before submitting.'); return; }
+    if (sel.value === 'miss') { anyMiss = true; allHit = false; }
+    if (sel.value === 'push') allHit = false;
+  }
+
+  p.status = allHit ? 'win' : anyMiss ? 'loss' : 'partial';
+  p.profit = allHit
+    ? parseFloat((p.payout || '').replace(/[^\d.]/g, '')) - 25
+    : (anyMiss ? -25 : 0);
+
+  const missSel = document.getElementById(`miss_${parlayId}`);
+  if (missSel && missSel.value) p.missReason = missSel.value;
+
+  save(all);
+  renderTable();
+  updateStats();
+  document.getElementById('resultsSection').classList.remove('show');
+  alert(`Marked ${p.status.toUpperCase()} ${allHit ? '🎉' : '📊'}`);
+}
+
+async function autoAnalyze(parlayId) {
+  const container = document.getElementById(`analyzeResult_${parlayId}`);
+  container.style.display = 'block';
+  container.innerHTML = `<div style="font-size:11px;color:var(--gray-500);font-family:var(--font-mono);padding:8px 0;">🔬 Running post-game analysis...</div>`;
+
+  const all = getAll();
+  const p = all.find(x => String(x.id) === String(parlayId));
+  if (!p) return;
+
+  const legArr = p.legs.split(' | ');
+  const results = legArr.map((l, i) => {
+    const sel = document.querySelector(`input[name="leg_${parlayId}_${i}"]:checked`);
+    return `${l}: ${sel ? sel.value.toUpperCase() : 'NOT MARKED'}`;
+  }).join('\n');
+
+  try {
+    const analysis = await callClaude(
+      `You are a post-game NBA prop betting analyst for a disciplined system. Analyze missed legs and categorize each miss using exactly one of these codes: BLOWOUT_REST | INJURY_IMPACT | MATCHUP | B2B_FATIGUE | OUTLIER_REGRESSION | LINE_TOO_HIGH | TRAP_VIOLATION | COACHING_ROTATION | PURE_VARIANCE | OTHER. For each miss, explain in 2 sentences: what happened and what the methodology adjustment should be. Be concise and specific.`,
+      `Parlay date: ${p.date}\nLegs and results:\n${results}\n\nFor each MISS, identify the failure category and the lesson learned. For HITS, just say "HIT - methodology confirmed."`,
+      1500
+    );
+
+    container.innerHTML = `
+      <div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:12px;margin-top:6px;">
+        <div style="font-family:var(--font-main);font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px;">🔬 POST-GAME ANALYSIS</div>
+        <div style="font-size:11px;color:var(--gray-700);line-height:1.7;white-space:pre-wrap;">${escHtml(analysis)}</div>
+      </div>`;
+  } catch (err) {
+    container.innerHTML = `<div style="font-size:11px;color:var(--red);padding:8px 0;">Analysis failed: ${escHtml(err.message)}</div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  STORAGE
+// ═══════════════════════════════════════════════════════════════
+
+function getAll() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function getPending() { return getAll().filter(p => p.status === 'pending'); }
+function save(arr) { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.slice(0, 100))); }
+function saveEntry(entry) {
+  const all = getAll();
+  all.unshift(entry);
+  save(all);
+}
+
+function renderTable() {
+  const tbody = document.getElementById('trackingBody');
+  if (!tbody) return;
+  const all = getAll();
+  if (all.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--gray-400);font-size:12px;">No parlays logged yet</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = all.map(p => `
+    <tr>
+      <td style="font-family:var(--font-mono);white-space:nowrap;">${escHtml(p.date)}</td>
+      <td style="max-width:240px;line-height:1.5;">${escHtml(p.legs)}</td>
+      <td style="font-family:var(--font-mono);">${escHtml(p.stake)}</td>
+      <td style="font-family:var(--font-mono);">${escHtml(p.payout)}</td>
+      <td>
+        <span class="status-badge status-${escHtml(p.status)}">
+          ${p.status === 'pending' ? '⏳' : p.status === 'win' ? '✅' : p.status === 'loss' ? '❌' : '➡️'}
+          ${escHtml(p.status.charAt(0).toUpperCase() + p.status.slice(1))}
+        </span>
+      </td>
+      <td style="font-family:var(--font-mono);color:${(p.profit||0) > 0 ? 'var(--green)' : (p.profit||0) < 0 ? 'var(--red)' : 'var(--gray-500)'};">
+        ${p.profit != null && p.profit !== '' ? ((p.profit > 0 ? '+' : '') + '$' + Math.abs(p.profit).toFixed(2)) : '—'}
+      </td>
+      <td style="font-size:10px;color:var(--gray-500);font-family:var(--font-mono);">${escHtml(p.missReason || '—')}</td>
+    </tr>`).join('');
+}
+
+function updateStats() {
+  const closed = getAll().filter(p => p.status !== 'pending');
+  const wins = closed.filter(p => p.status === 'win').length;
+  const losses = closed.filter(p => p.status === 'loss').length;
+  const total = wins + losses;
+  const rate = total > 0 ? Math.round(wins / total * 100) + '%' : '—';
+  const profit = closed.reduce((s, p) => s + (Number(p.profit) || 0), 0);
+
+  document.getElementById('statWins').textContent = wins;
+  document.getElementById('statLosses').textContent = losses;
+  document.getElementById('statRate').textContent = rate;
+  const pEl = document.getElementById('statProfit');
+  pEl.textContent = (profit >= 0 ? '+$' : '-$') + Math.abs(profit).toFixed(0);
+  pEl.className = `stat-num ${profit >= 0 ? 'green' : 'red'}`;
+}
+
+function confirmClear() {
+  if (!confirm('Clear all parlay history? This cannot be undone.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderTable();
+  updateStats();
+  document.getElementById('resultsBtn').disabled = true;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════════════
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderTable();
+  updateStats();
+
+  if (getPending().length > 0) {
+    document.getElementById('resultsBtn').disabled = false;
+  }
+
+  const ctTime = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    weekday: 'short', month: 'short', day: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: true
+  }).format(new Date());
+
+  document.getElementById('slateLabel').textContent = `Ready • ${ctTime} CT`;
+});
 </script>
 </body>
 </html>
